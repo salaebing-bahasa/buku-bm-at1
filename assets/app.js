@@ -1,4 +1,4 @@
-// Bahasa Melayu อต.๑ — เสียงอ่าน แบบทดสอบตนเอง บัตรคำ คำศัพท์วันนี้ และค้นหาอภิธานศัพท์
+// Bahasa Melayu อต.1 — เสียงอ่าน แบบทดสอบตนเอง บัตรคำ คำศัพท์วันนี้ และค้นหาอภิธานศัพท์
 (function () {
   "use strict";
 
@@ -47,8 +47,7 @@
     return el;
   }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
-  var TH = "๐๑๒๓๔๕๖๗๘๙";
-  function thNum(n) { return String(n).replace(/\d/g, function (d) { return TH[d]; }); }
+  function thNum(n) { return String(n); } // ใช้เลขอารบิก
   function jw(s) { return s ? '<span class="jw" lang="ms-Arab" dir="rtl">' + esc(s) + "</span>" : ""; }
 
   // ---------- แบบทดสอบตนเอง ----------

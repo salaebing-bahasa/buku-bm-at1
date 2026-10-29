@@ -1,4 +1,4 @@
-// สร้างเว็บไซต์หนังสือเรียนภาษามลายู อต.๑ จากไฟล์ข้อมูลเดียวกับหนังสือ Word
+// สร้างเว็บไซต์หนังสือเรียนภาษามลายู อต.1 จากไฟล์ข้อมูลเดียวกับหนังสือ Word
 // วิธีใช้:  node _src/build.js   (รันที่โฟลเดอร์หลักของ repo)
 const fs = require("fs");
 const path = require("path");
@@ -6,8 +6,7 @@ const path = require("path");
 const ROOT = path.join(__dirname, "..");
 const book = require("./data/at1.js");
 
-const TH_DIGITS = "๐๑๒๓๔๕๖๗๘๙";
-const thNum = (n) => String(n).replace(/\d/g, (d) => TH_DIGITS[d]);
+const thNum = (n) => String(n); // ใช้เลขอารบิก
 const pad = (n) => String(n).padStart(2, "0");
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
@@ -129,14 +128,14 @@ ${FONTS}
 <body>
 <a class="skip" href="#isi">ข้ามไปยังเนื้อหา</a>
 <header class="site-head">
-  <a class="brand" href="${base}index.html"><span class="mark" aria-hidden="true"></span><span>Bahasa Melayu อต.๑<small>หลักสูตรอิสลามศึกษาตอนต้น</small></span></a>
+  <a class="brand" href="${base}index.html"><span class="mark" aria-hidden="true"></span><span>Bahasa Melayu อต.1<small>หลักสูตรอิสลามศึกษาตอนต้น</small></span></a>
   <nav aria-label="เมนูหลัก">${nav}</nav>
 </header>
 <main id="isi">
 ${body}
 </main>
 <footer class="site-foot">
-  <p>หนังสือเรียนภาษามลายู ชั้นปีที่ ๑ (อต.๑) หลักสูตรอิสลามศึกษาตอนต้น</p>
+  <p>หนังสือเรียนภาษามลายู ชั้นปีที่ 1 (อต.1) หลักสูตรอิสลามศึกษาตอนต้น</p>
   <p>เรียบเรียงโดย ผศ.มูหำหมัด สาแลบิง · สาขาวิชาภาษามลายู คณะมนุษยศาสตร์และสังคมศาสตร์ มหาวิทยาลัยทักษิณ</p>
 </footer>
 <script src="${base}assets/app.js"></script>
@@ -181,7 +180,7 @@ ${quiz}
   ${prev ? `<a class="prev" href="${pad(n - 1)}.html"><small>บทก่อนหน้า</small>${esc(prev.title)}</a>` : "<span></span>"}
   ${next ? `<a class="next" href="${pad(n + 1)}.html"><small>บทถัดไป</small>${esc(next.title)}</a>` : `<a class="next" href="../glosari.html"><small>ท้ายเล่ม</small>อภิธานศัพท์</a>`}
 </nav>`;
-  return page({ title: `บทที่ ${thNum(n)} ${plain(u.title)} — Bahasa Melayu อต.๑`, desc: `${plain(u.title)} (${u.th}) บทเรียนภาษามลายู ชั้น อต.๑`, base: "../", body, current: "pelajaran" });
+  return page({ title: `บทที่ ${thNum(n)} ${plain(u.title)} — Bahasa Melayu อต.1`, desc: `${plain(u.title)} (${u.th}) บทเรียนภาษามลายู ชั้น อต.1`, base: "../", body, current: "pelajaran" });
 }
 
 // ---------------------------------------------------------------- หน้าแรก
@@ -194,11 +193,11 @@ function indexPage(words) {
   const body = `
 <section class="hero">
   <div class="hero-text">
-    <p class="kicker">หลักสูตรอิสลามศึกษาตอนต้น · ชั้นปีที่ ๑</p>
+    <p class="kicker">หลักสูตรอิสลามศึกษาตอนต้น · ชั้นปีที่ 1</p>
     <h1>หนังสือเรียนภาษามลายู<span class="ms-title">Buku Teks Bahasa Melayu</span></h1>
     <p class="jw jw-title" lang="ms-Arab" dir="rtl">بوکو تيکس بهاس ملايو</p>
-    <p class="lede">เรียนอักษรรูมีและอักษรยาวี สระ พยางค์ และคำศัพท์ใกล้ตัว ๙ บท ทุกบทฟังเสียงคำศัพท์ได้ มีแบบฝึกหัดพร้อมเฉลย และแบบทดสอบตนเอง ใช้ภาษามลายูมาตรฐานทั้งเล่ม</p>
-    <div class="actions"><a class="btn" href="pelajaran/01.html">เริ่มบทที่ ๑</a><a class="btn-ghost" href="#pelajaran">ดูบทเรียนทั้งหมด</a></div>
+    <p class="lede">เรียนอักษรรูมีและอักษรยาวี สระ พยางค์ และคำศัพท์ใกล้ตัว 9 บท ทุกบทฟังเสียงคำศัพท์ได้ มีแบบฝึกหัดพร้อมเฉลย และแบบทดสอบตนเอง ใช้ภาษามลายูมาตรฐานทั้งเล่ม</p>
+    <div class="actions"><a class="btn" href="pelajaran/01.html">เริ่มบทที่ 1</a><a class="btn-ghost" href="#pelajaran">ดูบทเรียนทั้งหมด</a></div>
   </div>
   <figure class="word" aria-live="polite">
     <p class="word-label">Kata hari ini · คำศัพท์วันนี้</p>
@@ -211,7 +210,7 @@ function indexPage(words) {
 </section>
 
 <section class="block" id="pelajaran">
-  <h2>บทเรียน ๙ บท</h2>
+  <h2>บทเรียน 9 บท</h2>
   <ol class="unit-cards">${cards}</ol>
 </section>
 
@@ -223,7 +222,7 @@ function indexPage(words) {
 <section class="block" id="standard">
   <h2>มาตรฐานและตัวชี้วัด</h2>
   <aside class="box"><p class="box-t">มาตรฐาน มย</p><p>ใช้กระบวนการฟัง พูด อ่าน เขียน เข้าใจหลักการในการใช้ภาษามลายูเพื่อการสื่อสาร การเรียนรู้ เพิ่มคุณค่าในการดำรงชีวิตประจำวันและศึกษาค้นคว้าความรู้จากแหล่งเรียนรู้อย่างสร้างสรรค์ และมีนิสัยรักการอ่าน</p></aside>
-  <div class="tbl"><table class="map"><thead><tr><th>รหัส</th><th>ตัวชี้วัดชั้นปีที่ ๑</th><th>บทที่</th></tr></thead><tbody>${map}</tbody></table></div>
+  <div class="tbl"><table class="map"><thead><tr><th>รหัส</th><th>ตัวชี้วัดชั้นปีที่ 1</th><th>บทที่</th></tr></thead><tbody>${map}</tbody></table></div>
 </section>
 
 <section class="block" id="guru">
@@ -235,7 +234,7 @@ function indexPage(words) {
     <li>เปิดบนโปรเจกเตอร์ได้ ตัวอักษรในตารางอักษรรูมีและยาวีมีขนาดใหญ่ แตะเพื่อฟังเสียงได้</li>
   </ul>
 </section>`;
-  return page({ title: "หนังสือเรียนภาษามลายู อต.๑ — Buku Teks Bahasa Melayu Tahun 1", desc: "หนังสือเรียนภาษามลายู ชั้นปีที่ ๑ หลักสูตรอิสลามศึกษาตอนต้น พร้อมเสียงคำศัพท์ แบบฝึกหัด และแบบทดสอบตนเอง", base: "", body, current: "" });
+  return page({ title: "หนังสือเรียนภาษามลายู อต.1 — Buku Teks Bahasa Melayu Tahun 1", desc: "หนังสือเรียนภาษามลายู ชั้นปีที่ 1 หลักสูตรอิสลามศึกษาตอนต้น พร้อมเสียงคำศัพท์ แบบฝึกหัด และแบบทดสอบตนเอง", base: "", body, current: "" });
 }
 
 // ---------------------------------------------------------------- อภิธานศัพท์
@@ -252,7 +251,7 @@ function glosariPage() {
 <label class="search"><span>ค้นหาคำ (ภาษามลายูหรือภาษาไทย)</span><input type="search" id="g-q" placeholder="เช่น mata หรือ ครู" autocomplete="off"></label>
 <p class="hint" id="g-count" aria-live="polite"></p>
 <div class="tbl"><table class="vocab" id="g-table"><thead><tr><th>Rumi</th><th>Jawi</th><th>ความหมาย</th><th>บทที่</th></tr></thead><tbody>${rows}</tbody></table></div>`;
-  return { html: page({ title: "อภิธานศัพท์ — Bahasa Melayu อต.๑", desc: "อภิธานศัพท์ภาษามลายู–ไทย ชั้น อต.๑", base: "", body, current: "glosari" }), all };
+  return { html: page({ title: "อภิธานศัพท์ — Bahasa Melayu อต.1", desc: "อภิธานศัพท์ภาษามลายู–ไทย ชั้น อต.1", base: "", body, current: "glosari" }), all };
 }
 
 // ---------------------------------------------------------------- เขียนไฟล์
