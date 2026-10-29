@@ -22,3 +22,8 @@ node _src/build.js
 ```
 
 ถ้าแก้คำผิดเล็กน้อย จะแก้ในไฟล์ `.html` บนหน้า GitHub โดยตรงก็ได้ แต่ถ้ารัน `build.js` ภายหลัง ส่วนที่แก้ใน `.html` จะถูกเขียนทับ
+
+## สถิติผู้เข้าชม (GoatCounter)
+
+เว็บไซต์นับผู้เข้าชมด้วย GoatCounter รหัส `buku-bm-at1` ดูสถิติได้ที่ https://buku-bm-at1.goatcounter.com
+ถ้าต้องการเปลี่ยนรหัส ให้แก้บรรทัด `const GOATCOUNTER = ...` ในไฟล์ `_src/build.js` แล้วรัน `node _src/build.js`
