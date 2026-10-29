@@ -4,6 +4,7 @@ const fs = require("fs");
 const path = require("path");
 
 const ROOT = path.join(__dirname, "..");
+const GOATCOUNTER = "buku-bm-at1"; // รหัสเว็บไซต์ใน GoatCounter (สถิติผู้เข้าชม)
 const book = require("./data/at1.js");
 
 const thNum = (n) => String(n); // ใช้เลขอารบิก
@@ -139,6 +140,7 @@ ${body}
   <p>เรียบเรียงโดย ผศ.มูหำหมัด สาแลบิง · สาขาวิชาภาษามลายู คณะมนุษยศาสตร์และสังคมศาสตร์ มหาวิทยาลัยทักษิณ</p>
 </footer>
 <script src="${base}assets/app.js"></script>
+<script data-goatcounter="https://${GOATCOUNTER}.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
 `;
