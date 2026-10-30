@@ -150,6 +150,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 1.5rem 16px 3rem; }
 .box.note, .box.nilai { background: var(--gold-soft); border-left-color: var(--gold-line); }
 .box.note .box-t, .box.nilai .box-t { color: var(--gold); }
 .box.nilai { margin-top: 2.2rem; }
+.box.nilai .nilai-th { margin-top: .45rem; }
 
 /* ตาราง */
 .tbl { overflow-x: auto; margin: .8rem 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
