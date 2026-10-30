@@ -39,6 +39,10 @@ function md1(s) {
   return h;
 }
 const plain = (s) => String(s).replace(/\*\*?/g, "");
+// หลักการสะกดอักษรยาวีที่ใช้ทั้งชุด อต.1–อต.4
+const EJAAN = ["Ejaan Jawi dalam buku ini berdasarkan kaedah ejaan Jawi dalam <em>Pedoman Umum Ejaan Jawi Bahasa Melayu</em> terbitan Dewan Bahasa dan Pustaka (DBP).",
+  "การสะกดอักษรยาวีในหนังสือเล่มนี้ใช้หลักการสะกดตาม <em>Pedoman Umum Ejaan Jawi Bahasa Melayu</em> ของ Dewan Bahasa dan Pustaka (DBP)"];
+const ejaanBox = () => `<aside class="box ejaan"><p class="box-t">${bi("Kaedah ejaan Jawi", "หลักการสะกดอักษรยาวี")}</p><p lang="ms">${EJAAN[0]}</p><p class="tr">${EJAAN[1]}</p></aside>`;
 // ภาพประกอบคำศัพท์: assets/gambar/<คำ>.svg (ใช้คำแรกก่อนเครื่องหมาย /)
 const slug = (w) => plain(w).split("/")[0].trim().toLowerCase().replace(/\s+/g, "-");
 const imgOf = (w) => (fs.existsSync(path.join(ROOT, "assets", "gambar", slug(w) + ".svg")) ? slug(w) : "");
@@ -319,6 +323,7 @@ function indexPage(words) {
   <h2 class="sheet-title">${hBi("Kata Pengantar", "คำนำ")}</h2>
   ${ORN}
   ${book.preface.map((p, i) => pBi(md(book.preface_ms[i]), md(p), "prose")).join("")}
+  ${ejaanBox()}
   <p class="sign"><span lang="ms">Asst. Prof. Muhammad Salaebing</span><span class="tr">ผศ.มูหำหมัด สาแลบิง · ผู้เรียบเรียง</span></p>
   ${folio("ii")}
 </article>
@@ -374,6 +379,7 @@ function glosariPage() {
 <article class="sheet">
 ${running(bi("Glosari", "อภิธานศัพท์"))}
 <header class="unit-head opener"><p class="op-k">${bi("Akhir buku", "ท้ายเล่ม")}</p><h1>Glosari</h1><p class="th-title">อภิธานศัพท์</p><p class="hint">${bi(`Semua perkataan: ${all.length}, disusun mengikut abjad`, `คำศัพท์ทั้งหมด ${thNum(all.length)} คำ เรียงตามตัวอักษร`)}</p></header>
+${ejaanBox()}
 <label class="search"><span>${bi("Cari perkataan (bahasa Melayu atau bahasa Thai)", "ค้นหาคำ (ภาษามลายูหรือภาษาไทย)")}</span><input type="search" id="g-q" placeholder="cth. mata · เช่น ครู" autocomplete="off"></label>
 <p class="hint" id="g-count" aria-live="polite"></p>
 <div class="tbl"><table class="vocab" id="g-table"><thead><tr><th>Rumi</th><th>Jawi</th><th>${bi("Maksud", "ความหมาย")}</th><th>${bi("Pelajaran", "บทที่")}</th></tr></thead><tbody>${rows}</tbody></table></div>
