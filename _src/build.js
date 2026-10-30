@@ -17,7 +17,14 @@ const AR_ONLY = new RegExp(`^[${AR}\\s/]+$`);
 const hasAr = (s) => new RegExp(`[${AR}]`).test(s);
 
 // **ตัวหนา**  *ตัวเอียง*  และห่ออักษรยาวีด้วย span ที่อ่านจากขวาไปซ้าย
+// ข้อความสองภาษาในไฟล์ข้อมูลเขียนแบบ "มลายู||ไทย" → แสดงมลายูบรรทัดบน ไทยบรรทัดล่าง
 function md(s) {
+  const parts = String(s).split("||");
+  if (parts.length === 2) return bi(md1(parts[0].trim()), md1(parts[1].trim()));
+  return md1(s);
+}
+const msPart = (s) => String(s).split("||")[0];
+function md1(s) {
   let h = esc(s);
   h = h.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/\*(.+?)\*/g, "<em>$1</em>");
   h = h.replace(AR_RUN, (m) => `<span class="jw" lang="ms-Arab" dir="rtl">${m}</span>`);
@@ -71,7 +78,7 @@ function renderBlock(b) {
       }).join("");
       return `<p class="hint">${bi("Sentuh huruf untuk mendengar sebutan", "แตะที่ตัวอักษรเพื่อฟังเสียง")}</p><ul class="letters${b.items.some((i) => hasAr(i[0])) ? " rtl" : ""}" style="--cols:${b.cols || 6}">${tiles}</ul>`;
     }
-    case "dialog": return `<figure class="dialog">${b.title ? `<figcaption>${md(b.title)}</figcaption>` : ""}${b.lines.map(([who, t]) => `<div class="turn"><span class="who">${esc(who)}</span><span class="said">${md(t)} ${speakBtn(t.replace(/\(.*?\)/g, ""), who)}</span></div>`).join("")}</figure>`;
+    case "dialog": return `<figure class="dialog">${b.title ? `<figcaption>${md(b.title)}</figcaption>` : ""}${b.lines.map(([who, t]) => `<div class="turn"><span class="who">${esc(who)}</span><span class="said">${md(t)} ${speakBtn(msPart(t).replace(/\(.*?\)/g, ""), who)}</span></div>`).join("")}</figure>`;
     case "reading": {
       const all = b.paras.map(plain).join(" ");
       return `<article class="reading">${b.title ? `<h4>${md(b.title)}</h4>` : ""}${b.paras.map((p) => `<p>${md(p)}</p>`).join("")}<button type="button" class="btn-ghost say-long" data-say="${esc(all)}">${SPEAK_ICON}<span>${bi("Dengar semua", "ฟังทั้งเรื่อง")}</span></button></article>`;
@@ -100,7 +107,7 @@ function unitVocab(u) {
   u.sections.forEach((s) => s.blocks.forEach((b) => {
     // ตารางที่มีคอลัมน์ Rumi/คำ + Jawi + ความหมาย ก็นับเป็นคำศัพท์ด้วย
     if (b.type === "table") {
-      const H = b.head.map(plain);
+      const H = b.head.map((h) => plain(h).split("||").pop().trim());
       const m = H.findIndex((x) => x === "Rumi" || x === "คำ"), j = H.indexOf("Jawi"), t = H.indexOf("ความหมาย");
       if (m < 0 || j < 0 || t < 0) return;
       b.rows.forEach((r) => out.push({ ms: plain(r[m]), jw: r[j], th: r[t] }));
