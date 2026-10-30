@@ -358,6 +358,27 @@ main.turn-prev .sheet { animation: turnPrev .22s ease-in forwards; }
   .sheet { box-shadow: 3px 3px 0 -1px var(--sheet), 3px 3px 0 0 var(--line), 0 18px 30px -20px rgba(40,30,10,.45); }
 }
 
+/* ภาพประกอบคำศัพท์ */
+.vocab .pic-c { width: 4.6rem; text-align: center; }
+.vocab td.pic-c .pic { display: block; margin: 0 auto; width: 52px; height: 52px; }
+td.ms .pic { vertical-align: middle; margin-right: .45rem; }
+.face.front .pic { display: block; margin: 0 auto .25rem; width: 56px; height: 56px; }
+.f-ms { display: block; }
+.card:has(.pic) { height: 10rem; }
+@media (max-width: 520px) {
+  .vocab .pic-c { width: 2.8rem; padding-left: .3rem; padding-right: .3rem; }
+  .vocab td.pic-c .pic { width: 36px; height: 36px; }
+  .vocab th.pic-c .bi > .tr { display: none; }
+  .vocab td, .vocab th { padding-left: .45rem; padding-right: .45rem; }
+  .vocab td.n { padding-right: 0; }
+  .vocab:has(.pic-c) td.n, .vocab:has(.pic-c) th:first-child { display: none; }
+  .vocab:has(.pic-c) td.ms { white-space: normal; }
+  .vocab:has(.pic-c) td.ms > span { display: block; margin: 0 0 .2rem; }
+  .vocab th.pic-c { font-size: .78rem; }
+  .vocab th .tr { white-space: nowrap; }
+}
+.w-pic { display: block; margin: .6rem auto 0; width: 84px; height: 84px; }
+.w-pic[hidden] { display: none; }
 @media print {
   @page { size: A4; margin: 14mm 14mm 16mm; }
   :root { --paper: #fff; --surface: #fff; }

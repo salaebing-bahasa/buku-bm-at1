@@ -39,6 +39,10 @@ function md1(s) {
   return h;
 }
 const plain = (s) => String(s).replace(/\*\*?/g, "");
+// ภาพประกอบคำศัพท์: assets/gambar/<คำ>.svg (ใช้คำแรกก่อนเครื่องหมาย /)
+const slug = (w) => plain(w).split("/")[0].trim().toLowerCase().replace(/\s+/g, "-");
+const imgOf = (w) => (fs.existsSync(path.join(ROOT, "assets", "gambar", slug(w) + ".svg")) ? slug(w) : "");
+const picTag = (w, base, size) => { const g = imgOf(w); return g ? `<img class="pic" src="${base}assets/gambar/${g}.svg" alt="" width="${size}" height="${size}" loading="lazy" decoding="async">` : ""; };
 // ป้ายสองภาษา: มลายูก่อน ไทยตามหลัง
 const bi = (ms, th) => `<span class="bi"><span lang="ms">${ms}</span><span class="tr">${th}</span></span>`;
 // หัวข้อในข้อมูลที่เขียนแบบ "มลายู  ไทย" (เว้นสองช่อง) แยกเป็นสองบรรทัด
@@ -57,12 +61,15 @@ function renderBlock(b) {
     case "p": return `<p>${md(b.text)}</p>`;
     case "bullets": return `<ul class="bul">${b.items.map((i) => `<li>${md(i)}</li>`).join("")}</ul>`;
     case "vocab": {
-      const head = b.noJawi ? `<th>#</th><th>Bahasa Melayu</th><th>${bi("Maksud", "ความหมาย")}</th>` : `<th>#</th><th>Rumi</th><th>Jawi</th><th>${bi("Maksud", "ความหมาย")}</th>`;
+      const hasPic = b.rows.some((r) => imgOf(r[0]));
+      const picH = hasPic ? `<th class="pic-c">${bi("Gambar", "ภาพ")}</th>` : "";
+      const head = b.noJawi ? `<th>#</th>${picH}<th>Bahasa Melayu</th><th>${bi("Maksud", "ความหมาย")}</th>` : `<th>#</th>${picH}<th>Rumi</th><th>Jawi</th><th>${bi("Maksud", "ความหมาย")}</th>`;
       const rows = b.rows.map((r, i) => {
         const [ms, a, c] = r;
         const jw = b.noJawi ? "" : `<td class="jw-cell">${md(a)}</td>`;
         const th = b.noJawi ? a : c;
-        return `<tr><td class="n">${thNum(i + 1)}</td><td class="ms"><span>${md(ms)}</span>${speakBtn(ms)}</td>${jw}<td>${md(th)}</td></tr>`;
+        const picC = hasPic ? `<td class="pic-c">${picTag(ms, "../", 52)}</td>` : "";
+        return `<tr><td class="n">${thNum(i + 1)}</td>${picC}<td class="ms"><span>${md(ms)}</span>${speakBtn(ms)}</td>${jw}<td>${md(th)}</td></tr>`;
       }).join("");
       return `<div class="tbl"><table class="vocab"><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table></div>`;
     }
@@ -124,7 +131,9 @@ function unitVocab(u) {
     b.rows.forEach((r) => {
       const ms = plain(r[0]);
       if (/[?!…]|\.\.\./.test(ms)) return;
-      out.push(b.noJawi ? { ms, th: r[1] } : { ms, jw: r[1], th: r[2] });
+      const v = b.noJawi ? { ms, th: r[1] } : { ms, jw: r[1], th: r[2] };
+      if (imgOf(ms)) v.img = imgOf(ms);
+      out.push(v);
     });
   }));
   return out;
@@ -287,6 +296,7 @@ function indexPage(words) {
     <div class="actions"><a class="btn" href="#pelajaran">${bi("Buka buku", "เปิดหนังสือ")}</a><a class="btn-ghost" href="pelajaran/01.html">${bi("Mula Pelajaran 1", "เริ่มบทที่ 1")}</a></div>
     <figure class="word" aria-live="polite">
       <p class="word-label">${bi("Perkataan hari ini", "คำศัพท์วันนี้")}</p>
+      <img class="w-pic" id="w-pic" src="" alt="" width="84" height="84" hidden>
       <p class="w-ms" id="w-ms">—</p>
       <p class="w-jw jw" id="w-jw" lang="ms-Arab" dir="rtl"></p>
       <p class="w-th" id="w-th"></p>
@@ -359,7 +369,7 @@ function glosariPage() {
     if (!map.has(k)) map.set(k, { ...v, unit: i + 1 });
   }));
   const all = [...map.values()].sort((a, b) => a.ms.localeCompare(b.ms, "ms"));
-  const rows = all.map((v) => `<tr data-q="${esc((v.ms + " " + v.th).toLowerCase())}"><td class="ms"><span>${esc(v.ms)}</span>${speakBtn(v.ms)}</td><td class="jw-cell">${v.jw ? md(v.jw) : ""}</td><td>${esc(v.th)}</td><td class="n"><a href="pelajaran/${pad(v.unit)}.html">${thNum(v.unit)}</a></td></tr>`).join("");
+  const rows = all.map((v) => `<tr data-q="${esc((v.ms + " " + v.th).toLowerCase())}"><td class="ms">${v.img ? `<img class="pic" src="assets/gambar/${v.img}.svg" alt="" width="34" height="34" loading="lazy" decoding="async">` : ""}<span>${esc(v.ms)}</span>${speakBtn(v.ms)}</td><td class="jw-cell">${v.jw ? md(v.jw) : ""}</td><td>${esc(v.th)}</td><td class="n"><a href="pelajaran/${pad(v.unit)}.html">${thNum(v.unit)}</a></td></tr>`).join("");
   const body = `
 <article class="sheet">
 ${running(bi("Glosari", "อภิธานศัพท์"))}
