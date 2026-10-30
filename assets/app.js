@@ -48,6 +48,7 @@
   }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function thNum(n) { return String(n); } // ใช้เลขอารบิก
+  function bi(ms, th) { return '<span lang="ms">' + ms + '</span> <span class="tr">· ' + th + "</span>"; }
   function jw(s) { return s ? '<span class="jw" lang="ms-Arab" dir="rtl">' + esc(s) + "</span>" : ""; }
 
   // ---------- แบบทดสอบตนเอง ----------
@@ -63,7 +64,7 @@
       var w = qs[idx];
       var opts = shuffle([w].concat(shuffle(words.filter(function (x) { return x.th !== w.th; })).slice(0, 3)));
       box.innerHTML = "";
-      box.appendChild(h("p", { "class": "qz-prog" }, "ข้อ " + thNum(idx + 1) + " / " + thNum(qs.length) + " · คำนี้แปลว่าอะไร"));
+      box.appendChild(h("p", { "class": "qz-prog" }, bi("Soalan " + (idx + 1) + " / " + qs.length + " · Apakah maksud perkataan ini?", "ข้อ " + thNum(idx + 1) + " / " + thNum(qs.length) + " คำนี้แปลว่าอะไร")));
       var word = h("p", { "class": "qz-word" }, "<span>" + esc(w.ms) + "</span>" + jw(w.jw));
       if (!document.documentElement.classList.contains("no-voice")) {
         var sb = h("button", { type: "button", "class": "say", "data-say": w.ms, "aria-label": "ฟังเสียง " + w.ms },
@@ -83,9 +84,9 @@
             if (opts[i] === w) x.classList.add("right");
           });
           if (!ok) b.classList.add("wrong");
-          fb.textContent = ok ? "ถูกต้อง! Bagus!" : "ยังไม่ถูก คำตอบคือ “" + w.th + "”";
+          fb.innerHTML = ok ? bi("Betul! Bagus!", "ถูกต้อง!") : bi("Belum betul. Jawapannya “" + esc(w.th) + "”", "ยังไม่ถูก คำตอบคือ “" + esc(w.th) + "”");
           fb.style.color = ok ? "var(--ok)" : "var(--no)";
-          var nx = h("button", { type: "button", "class": "btn" }, idx + 1 < qs.length ? "ข้อต่อไป" : "ดูคะแนน");
+          var nx = h("button", { type: "button", "class": "btn" }, idx + 1 < qs.length ? bi("Soalan seterusnya", "ข้อต่อไป") : bi("Lihat markah", "ดูคะแนน"));
           nx.addEventListener("click", function () { idx++; ask(); });
           box.appendChild(nx);
           nx.focus();
@@ -97,10 +98,10 @@
     }
     function finish() {
       box.innerHTML = "";
-      box.appendChild(h("p", { "class": "qz-prog" }, "ทำครบแล้ว"));
-      box.appendChild(h("p", { "class": "qz-score" }, "ได้ " + thNum(score) + " จาก " + thNum(qs.length) + " คะแนน"));
-      box.appendChild(h("p", null, score === qs.length ? "ยอดเยี่ยม! Syabas!" : "ลองอีกครั้งเพื่อทบทวนคำที่ยังจำไม่ได้"));
-      var again = h("button", { type: "button", "class": "btn" }, "ทำอีกครั้ง");
+      box.appendChild(h("p", { "class": "qz-prog" }, bi("Selesai", "ทำครบแล้ว")));
+      box.appendChild(h("p", { "class": "qz-score" }, '<span lang="ms">Markah: ' + score + " / " + qs.length + '</span><span class="sc-th">ได้ ' + thNum(score) + " จาก " + thNum(qs.length) + " คะแนน</span>"));
+      box.appendChild(h("p", null, score === qs.length ? bi("Syabas! Cemerlang!", "ยอดเยี่ยม!") : bi("Cuba lagi untuk mengulang kaji perkataan yang belum diingati.", "ลองอีกครั้งเพื่อทบทวนคำที่ยังจำไม่ได้")));
+      var again = h("button", { type: "button", "class": "btn" }, bi("Cuba lagi", "ทำอีกครั้ง"));
       again.addEventListener("click", start);
       box.appendChild(again);
     }
@@ -145,7 +146,7 @@
     var run = function () {
       var t = q.value.trim().toLowerCase(), n = 0;
       rows.forEach(function (r) { var hit = !t || r.getAttribute("data-q").indexOf(t) > -1; r.hidden = !hit; if (hit) n++; });
-      cnt.textContent = t ? "พบ " + thNum(n) + " คำ" : "";
+      cnt.innerHTML = t ? bi("Dijumpai " + n + " perkataan", "พบ " + thNum(n) + " คำ") : "";
     };
     q.addEventListener("input", run);
   }

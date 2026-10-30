@@ -25,6 +25,10 @@ function md(s) {
   return h;
 }
 const plain = (s) => String(s).replace(/\*\*?/g, "");
+// ป้ายสองภาษา: มลายูก่อน ไทยตามหลัง
+const bi = (ms, th) => `<span lang="ms">${ms}</span> <span class="tr">· ${th}</span>`;
+const hBi = (ms, th) => `<span lang="ms">${ms}</span><span class="h-th">${th}</span>`;
+const pBi = (ms, th, cls = "") => `<div class="dw${cls ? " " + cls : ""}"><p lang="ms">${ms}</p><p class="tr">${th}</p></div>`;
 
 const SPEAK_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
 const speakBtn = (text, label) => `<button type="button" class="say" data-say="${esc(plain(text))}" aria-label="ฟังเสียง ${esc(label || plain(text))}" title="ฟังเสียง">${SPEAK_ICON}</button>`;
@@ -36,7 +40,7 @@ function renderBlock(b) {
     case "p": return `<p>${md(b.text)}</p>`;
     case "bullets": return `<ul class="bul">${b.items.map((i) => `<li>${md(i)}</li>`).join("")}</ul>`;
     case "vocab": {
-      const head = b.noJawi ? "<th>#</th><th>Bahasa Melayu</th><th>ความหมาย</th>" : "<th>#</th><th>Rumi</th><th>Jawi</th><th>ความหมาย</th>";
+      const head = b.noJawi ? "<th>#</th><th>Bahasa Melayu</th><th>Maksud · ความหมาย</th>" : "<th>#</th><th>Rumi</th><th>Jawi</th><th>Maksud · ความหมาย</th>";
       const rows = b.rows.map((r, i) => {
         const [ms, a, c] = r;
         const jw = b.noJawi ? "" : `<td class="jw-cell">${md(a)}</td>`;
@@ -62,15 +66,15 @@ function renderBlock(b) {
         const say = jawi ? name : l.split(" ")[0].toLowerCase();
         return `<li><button type="button" class="tile${jawi ? " is-jw" : ""}" data-say="${esc(say)}" aria-label="${esc(jawi ? `อักษร ${name}` : `อักษร ${l}`)}"><span class="glyph"${jawi ? ' lang="ms-Arab" dir="rtl"' : ""}>${esc(l)}</span>${name ? `<span class="nm">${esc(name)}</span>` : ""}</button></li>`;
       }).join("");
-      return `<p class="hint">แตะที่ตัวอักษรเพื่อฟังเสียง</p><ul class="letters${b.items.some((i) => hasAr(i[0])) ? " rtl" : ""}" style="--cols:${b.cols || 6}">${tiles}</ul>`;
+      return `<p class="hint">${bi("Sentuh huruf untuk mendengar sebutan", "แตะที่ตัวอักษรเพื่อฟังเสียง")}</p><ul class="letters${b.items.some((i) => hasAr(i[0])) ? " rtl" : ""}" style="--cols:${b.cols || 6}">${tiles}</ul>`;
     }
     case "dialog": return `<figure class="dialog">${b.title ? `<figcaption>${md(b.title)}</figcaption>` : ""}${b.lines.map(([who, t]) => `<div class="turn"><span class="who">${esc(who)}</span><span class="said">${md(t)} ${speakBtn(t.replace(/\(.*?\)/g, ""), who)}</span></div>`).join("")}</figure>`;
     case "reading": {
       const all = b.paras.map(plain).join(" ");
-      return `<article class="reading">${b.title ? `<h4>${md(b.title)}</h4>` : ""}${b.paras.map((p) => `<p>${md(p)}</p>`).join("")}<button type="button" class="btn-ghost say-long" data-say="${esc(all)}">${SPEAK_ICON}<span>ฟังทั้งเรื่อง</span></button></article>`;
+      return `<article class="reading">${b.title ? `<h4>${md(b.title)}</h4>` : ""}${b.paras.map((p) => `<p>${md(p)}</p>`).join("")}<button type="button" class="btn-ghost say-long" data-say="${esc(all)}">${SPEAK_ICON}<span>${bi("Dengar semua", "ฟังทั้งเรื่อง")}</span></button></article>`;
     }
     case "pantun": return `<blockquote class="pantun">${b.lines.map((l, i) => `${md(l)}${(i + 1) % 4 === 0 && i < b.lines.length - 1 ? "</blockquote><blockquote class=\"pantun\">" : "<br>"}`).join("")}</blockquote>`;
-    case "note": return `<aside class="box note"><p class="box-t">${md(b.title || "หมายเหตุ")}</p>${b.lines.map((l) => `<p>${md(l)}</p>`).join("")}</aside>`;
+    case "note": return `<aside class="box note"><p class="box-t">${(b.title ? md(b.title) : bi("Catatan", "หมายเหตุ"))}</p>${b.lines.map((l) => `<p>${md(l)}</p>`).join("")}</aside>`;
     case "pattern": return `<aside class="box pattern"><p class="box-t">${md(b.title || "Pola ayat  รูปประโยค")}</p>${b.lines.map((l) => `<p>${md(l)}</p>`).join("")}</aside>`;
     default: throw new Error("บล็อกไม่รู้จัก: " + b.type);
   }
@@ -82,7 +86,7 @@ function renderLatihan(lat) {
     if (x.items) body += `<ol class="items">${x.items.map((i) => `<li>${md(i)}</li>`).join("")}</ol>`;
     if (x.table) body += renderBlock({ type: "table", head: x.table.head, rows: x.table.rows });
     if (x.lines) body += `<div class="write" style="--n:${x.lines}" aria-hidden="true"></div>`;
-    if (x.answers) body += `<details class="ans"><summary>ดูเฉลย</summary><p>${md(x.answers)}</p></details>`;
+    if (x.answers) body += `<details class="ans"><summary>${bi("Lihat jawapan", "ดูเฉลย")}</summary><p>${md(x.answers)}</p></details>`;
     return `<li><p class="q">${md(x.q)}</p>${body}</li>`;
   }).join("")}</ol>`;
 }
@@ -113,8 +117,8 @@ function unitVocab(u) {
 const FONTS = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=Noto+Naskh+Arabic:wght@400;600&family=Sarabun:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">';
 
 function page({ title, desc, base, body, current }) {
-  const nav = [["index.html#pelajaran", "บทเรียน", "pelajaran"], ["glosari.html", "อภิธานศัพท์", "glosari"], ["index.html#guru", "สำหรับครู", "guru"]]
-    .map(([h, t, k]) => `<a href="${base}${h}"${current === k ? ' aria-current="page"' : ""}>${t}</a>`).join("");
+  const nav = [["index.html", "Laman Utama", "หน้าแรก", "utama"], ["index.html#pelajaran", "Pelajaran", "บทเรียน", "pelajaran"], ["glosari.html", "Glosari", "อภิธานศัพท์", "glosari"], ["index.html#guru", "Untuk Guru", "สำหรับครู", "guru"]]
+    .map(([h, m, t, k]) => `<a href="${base}${h}"${current === k ? ' aria-current="page"' : ""}><span lang="ms">${m}</span><small>${t}</small></a>`).join("");
   return `<!doctype html>
 <html lang="th">
 <head>
@@ -127,16 +131,18 @@ ${FONTS}
 <link rel="icon" href="${base}assets/favicon.svg" type="image/svg+xml">
 </head>
 <body>
-<a class="skip" href="#isi">ข้ามไปยังเนื้อหา</a>
+<a class="skip" href="#isi">Langkau ke kandungan · ข้ามไปยังเนื้อหา</a>
 <header class="site-head">
-  <a class="brand" href="${base}index.html"><span class="mark" aria-hidden="true"></span><span>Bahasa Melayu อต.1<small>หลักสูตรอิสลามศึกษาตอนต้น</small></span></a>
-  <nav aria-label="เมนูหลัก">${nav}</nav>
+  <a class="brand" href="${base}index.html"><span class="mark" aria-hidden="true"></span><span>Bahasa Melayu อต.1<small lang="ms">Pendidikan Islam Peringkat Awal</small><small>หลักสูตรอิสลามศึกษาตอนต้น</small></span></a>
+  <nav aria-label="Menu utama · เมนูหลัก">${nav}</nav>
 </header>
 <main id="isi">
 ${body}
 </main>
 <footer class="site-foot">
-  <p>หนังสือเรียนภาษามลายู ชั้นปีที่ 1 (อต.1) หลักสูตรอิสลามศึกษาตอนต้น</p>
+  <p lang="ms">Buku Teks Bahasa Melayu Tahun 1 (อต.1) Kurikulum Pendidikan Islam Peringkat Awal</p>
+  <p lang="ms">Disusun oleh Pen. Prof. Muhammad Salaebing · Program Bahasa Melayu, Fakulti Kemanusiaan dan Sains Sosial, Universiti Thaksin</p>
+  <p class="foot-th">หนังสือเรียนภาษามลายู ชั้นปีที่ 1 (อต.1) หลักสูตรอิสลามศึกษาตอนต้น</p>
   <p>เรียบเรียงโดย ผศ.มูหำหมัด สาแลบิง · สาขาวิชาภาษามลายู คณะมนุษยศาสตร์และสังคมศาสตร์ มหาวิทยาลัยทักษิณ</p>
 </footer>
 <script src="${base}assets/app.js"></script>
@@ -152,35 +158,35 @@ function unitPage(u, i) {
   const prev = i > 0 ? book.units[i - 1] : null;
   const next = book.units[i + 1] || null;
   const vocab = unitVocab(u);
-  const chips = u.indicators.map((k) => `<li title="${esc(book.indicators[k - 1])}">อต.${thNum(book.grade)}/${thNum(k)}</li>`).join("");
+  const chips = u.indicators.map((k) => `<li title="${esc(book.indicators_ms[k - 1] + " · " + book.indicators[k - 1])}">อต.${thNum(book.grade)}/${thNum(k)}</li>`).join("");
   const sections = u.sections.map((s) => `<section class="sec"><h3>${md(s.title)}</h3>${s.blocks.map(renderBlock).join("\n")}</section>`).join("\n");
   const quiz = vocab.length >= 4 ? `
 <section class="sec kuiz" id="kuiz">
-  <h3>Kuiz kendiri  ทดสอบตนเอง</h3>
-  <p class="hint">เลือกความหมายที่ถูกต้อง ทำซ้ำได้หลายรอบ ข้อจะสุ่มใหม่ทุกครั้ง</p>
+  <h3>${hBi("Kuiz Kendiri", "ทดสอบตนเอง")}</h3>
+  <p class="hint">${bi("Pilih maksud yang betul. Kuiz boleh diulang; soalan dipilih secara rawak setiap kali.", "เลือกความหมายที่ถูกต้อง ทำซ้ำได้หลายรอบ ข้อจะสุ่มใหม่ทุกครั้ง")}</p>
   <div class="quiz" data-vocab="${esc(JSON.stringify(vocab))}"></div>
 </section>
 <section class="sec" id="kad">
-  <h3>Kad imbas  บัตรคำ</h3>
-  <p class="hint">แตะบัตรเพื่อพลิกดูความหมาย</p>
+  <h3>${hBi("Kad Imbas", "บัตรคำ")}</h3>
+  <p class="hint">${bi("Sentuh kad untuk melihat maksud", "แตะบัตรเพื่อพลิกดูความหมาย")}</p>
   <div class="cards" data-vocab="${esc(JSON.stringify(vocab))}"></div>
 </section>` : "";
   const body = `
-<nav class="crumb" aria-label="ตำแหน่ง"><a href="../index.html">หน้าแรก</a> / <a href="../index.html#pelajaran">บทเรียน</a> / <span>บทที่ ${thNum(n)}</span></nav>
+<nav class="crumb" aria-label="Lokasi · ตำแหน่ง"><a href="../index.html">Laman Utama · หน้าแรก</a> / <a href="../index.html#pelajaran">Pelajaran · บทเรียน</a> / <span>Pelajaran ${n} · บทที่ ${thNum(n)}</span></nav>
 <header class="unit-head">
   <p class="kicker">Pelajaran ${n} · บทที่ ${thNum(n)}</p>
   <h1>${md(u.title)}</h1>
   <p class="th-title">${md(u.th)}</p>
-  <ul class="chips" aria-label="ตัวชี้วัด">${chips}</ul>
+  <ul class="chips" aria-label="Petunjuk · ตัวชี้วัด">${chips}</ul>
 </header>
-<aside class="box obj"><p class="box-t">จุดประสงค์การเรียนรู้</p><ul>${u.objectives.map((o) => `<li>${md(o)}</li>`).join("")}</ul></aside>
+<aside class="box obj"><p class="box-t">${bi("Objektif Pembelajaran", "จุดประสงค์การเรียนรู้")}</p><ul>${u.objectives.map((o) => `<li>${md(o)}</li>`).join("")}</ul></aside>
 ${sections}
-<section class="sec" id="latihan"><h3>Latihan  แบบฝึกหัด</h3>${renderLatihan(u.latihan)}</section>
+<section class="sec" id="latihan"><h3>${hBi("Latihan", "แบบฝึกหัด")}</h3>${renderLatihan(u.latihan)}</section>
 ${quiz}
-<aside class="box nilai"><p class="box-t">Nilai murni · ข้อคิด</p><p>${md(u.nilai)}</p></aside>
-<nav class="pager" aria-label="บทก่อนหน้าและถัดไป">
-  ${prev ? `<a class="prev" href="${pad(n - 1)}.html"><small>บทก่อนหน้า</small>${esc(prev.title)}</a>` : "<span></span>"}
-  ${next ? `<a class="next" href="${pad(n + 1)}.html"><small>บทถัดไป</small>${esc(next.title)}</a>` : `<a class="next" href="../glosari.html"><small>ท้ายเล่ม</small>อภิธานศัพท์</a>`}
+<aside class="box nilai"><p class="box-t">${bi("Nilai Murni", "ข้อคิด")}</p><p>${md(u.nilai)}</p></aside>
+<nav class="pager" aria-label="Pelajaran sebelum dan seterusnya · บทก่อนหน้าและถัดไป">
+  ${prev ? `<a class="prev" href="${pad(n - 1)}.html"><small>Pelajaran sebelum · บทก่อนหน้า</small>${esc(prev.title)}</a>` : "<span></span>"}
+  ${next ? `<a class="next" href="${pad(n + 1)}.html"><small>Pelajaran seterusnya · บทถัดไป</small>${esc(next.title)}</a>` : `<a class="next" href="../glosari.html"><small>Akhir buku · ท้ายเล่ม</small>Glosari · อภิธานศัพท์</a>`}
 </nav>`;
   return page({ title: `บทที่ ${thNum(n)} ${plain(u.title)} — Bahasa Melayu อต.1`, desc: `${plain(u.title)} (${u.th}) บทเรียนภาษามลายู ชั้น อต.1`, base: "../", body, current: "pelajaran" });
 }
@@ -190,53 +196,59 @@ function indexPage(words) {
   const cards = book.units.map((u, i) => `<li><a href="pelajaran/${pad(i + 1)}.html"><span class="c-num">${thNum(i + 1)}</span><span class="c-title">${md(u.title)}</span><span class="c-th">${md(u.th)}</span></a></li>`).join("");
   const map = book.indicators.map((ind, k) => {
     const us = book.units.map((u, i) => (u.indicators.includes(k + 1) ? i + 1 : 0)).filter(Boolean);
-    return `<tr><td class="code">อต.${thNum(book.grade)}/${thNum(k + 1)}</td><td>${md(ind)}</td><td>${us.map((x) => `<a href="pelajaran/${pad(x)}.html">${thNum(x)}</a>`).join(" ")}</td></tr>`;
+    return `<tr><td class="code">อต.${thNum(book.grade)}/${thNum(k + 1)}</td><td><span lang="ms">${md(book.indicators_ms[k])}</span><span class="td-th">${md(ind)}</span></td><td>${us.map((x) => `<a href="pelajaran/${pad(x)}.html">${thNum(x)}</a>`).join(" ")}</td></tr>`;
   }).join("");
   const body = `
 <section class="hero">
   <div class="hero-text">
-    <p class="kicker">หลักสูตรอิสลามศึกษาตอนต้น · ชั้นปีที่ 1</p>
+    <p class="kicker"><span lang="ms">Pendidikan Islam Peringkat Awal · Tahun 1</span><br>หลักสูตรอิสลามศึกษาตอนต้น · ชั้นปีที่ 1</p>
     <h1>หนังสือเรียนภาษามลายู<span class="ms-title">Buku Teks Bahasa Melayu</span></h1>
     <p class="jw jw-title" lang="ms-Arab" dir="rtl">بوکو تيکس بهاس ملايو</p>
-    <p class="lede">เรียนอักษรรูมีและอักษรยาวี สระ พยางค์ และคำศัพท์ใกล้ตัว 9 บท ทุกบทฟังเสียงคำศัพท์ได้ มีแบบฝึกหัดพร้อมเฉลย และแบบทดสอบตนเอง ใช้ภาษามลายูมาตรฐานทั้งเล่ม</p>
-    <div class="actions"><a class="btn" href="pelajaran/01.html">เริ่มบทที่ 1</a><a class="btn-ghost" href="#pelajaran">ดูบทเรียนทั้งหมด</a></div>
+    ${pBi("Belajar huruf Rumi dan huruf Jawi, huruf vokal, suku kata dan perkataan di sekeliling kita dalam 9 pelajaran. Setiap pelajaran disertakan sebutan perkataan yang boleh didengar, latihan beserta jawapan, dan kuiz kendiri. Seluruh buku menggunakan bahasa Melayu standard.", "เรียนอักษรรูมีและอักษรยาวี สระ พยางค์ และคำศัพท์ใกล้ตัว 9 บท ทุกบทฟังเสียงคำศัพท์ได้ มีแบบฝึกหัดพร้อมเฉลย และแบบทดสอบตนเอง ใช้ภาษามลายูมาตรฐานทั้งเล่ม", "lede")}
+    <div class="actions"><a class="btn" href="pelajaran/01.html">${bi("Mula Pelajaran 1", "เริ่มบทที่ 1")}</a><a class="btn-ghost" href="#pelajaran">${bi("Semua Pelajaran", "ดูบทเรียนทั้งหมด")}</a></div>
   </div>
   <figure class="word" aria-live="polite">
-    <p class="word-label">Kata hari ini · คำศัพท์วันนี้</p>
+    <p class="word-label">Perkataan hari ini · คำศัพท์วันนี้</p>
     <p class="w-ms" id="w-ms">—</p>
     <p class="w-jw jw" id="w-jw" lang="ms-Arab" dir="rtl"></p>
     <p class="w-th" id="w-th"></p>
-    <div class="word-foot"><button type="button" class="btn-ghost" id="w-say">${SPEAK_ICON}<span>ฟังเสียง</span></button><button type="button" class="btn-ghost" id="w-next">คำอื่น</button></div>
+    <div class="word-foot"><button type="button" class="btn-ghost" id="w-say">${SPEAK_ICON}<span>${bi("Dengar", "ฟังเสียง")}</span></button><button type="button" class="btn-ghost" id="w-next">${bi("Perkataan lain", "คำอื่น")}</button></div>
   </figure>
   <script type="application/json" id="words">${JSON.stringify(words).replace(/</g, "\\u003c")}</script>
 </section>
 
 <section class="block" id="pelajaran">
-  <h2>บทเรียน 9 บท</h2>
+  <h2>${hBi("9 Pelajaran", "บทเรียน 9 บท")}</h2>
   <ol class="unit-cards">${cards}</ol>
 </section>
 
 <section class="block" id="pengenalan">
-  <h2>คำนำ</h2>
-  ${book.preface.map((p) => `<p class="prose">${md(p)}</p>`).join("")}
+  <h2>${hBi("Kata Pengantar", "คำนำ")}</h2>
+  ${book.preface.map((p, i) => pBi(md(book.preface_ms[i]), md(p), "prose")).join("")}
 </section>
 
 <section class="block" id="standard">
-  <h2>มาตรฐานและตัวชี้วัด</h2>
-  <aside class="box"><p class="box-t">มาตรฐาน มย</p><p>ใช้กระบวนการฟัง พูด อ่าน เขียน เข้าใจหลักการในการใช้ภาษามลายูเพื่อการสื่อสาร การเรียนรู้ เพิ่มคุณค่าในการดำรงชีวิตประจำวันและศึกษาค้นคว้าความรู้จากแหล่งเรียนรู้อย่างสร้างสรรค์ และมีนิสัยรักการอ่าน</p></aside>
-  <div class="tbl"><table class="map"><thead><tr><th>รหัส</th><th>ตัวชี้วัดชั้นปีที่ 1</th><th>บทที่</th></tr></thead><tbody>${map}</tbody></table></div>
+  <h2>${hBi("Standard dan Petunjuk", "มาตรฐานและตัวชี้วัด")}</h2>
+  <aside class="box"><p class="box-t">${bi("Standard มย", "มาตรฐาน มย")}</p><p lang="ms">Menggunakan proses mendengar, bertutur, membaca dan menulis serta memahami prinsip penggunaan bahasa Melayu untuk berkomunikasi, belajar, meningkatkan nilai kehidupan seharian dan mencari ilmu daripada sumber pembelajaran secara kreatif, serta mempunyai tabiat suka membaca.</p><p class="tr">ใช้กระบวนการฟัง พูด อ่าน เขียน เข้าใจหลักการในการใช้ภาษามลายูเพื่อการสื่อสาร การเรียนรู้ เพิ่มคุณค่าในการดำรงชีวิตประจำวันและศึกษาค้นคว้าความรู้จากแหล่งเรียนรู้อย่างสร้างสรรค์ และมีนิสัยรักการอ่าน</p></aside>
+  <div class="tbl"><table class="map"><thead><tr><th>Kod · รหัส</th><th>Petunjuk Tahun 1 · ตัวชี้วัดชั้นปีที่ 1</th><th>Pelajaran · บทที่</th></tr></thead><tbody>${map}</tbody></table></div>
 </section>
 
 <section class="block" id="guru">
-  <h2>สำหรับครู</h2>
-  <ul class="bul prose">
-    <li>ปุ่มลำโพงใช้เสียงอ่านภาษามลายูของเครื่อง (ระบบอ่านออกเสียงของโทรศัพท์หรือคอมพิวเตอร์) ถ้าเครื่องไม่มีเสียงภาษามลายู ระบบจะใช้เสียงภาษาอินโดนีเซียแทน ครูควรออกเสียงให้นักเรียนฟังเป็นหลัก และใช้ปุ่มนี้เพื่อทบทวน</li>
-    <li>แบบฝึกหัดในเว็บไซต์ตรงกับหนังสือเล่ม (ไฟล์ Word) ทุกข้อ ปุ่ม “ดูเฉลย” ใต้แต่ละข้อใช้ตรวจคำตอบหลังทำเสร็จแล้ว</li>
-    <li>“ทดสอบตนเอง” และ “บัตรคำ” ท้ายบทสุ่มจากคำศัพท์ของบทนั้น เหมาะสำหรับทบทวนที่บ้าน</li>
-    <li>เปิดบนโปรเจกเตอร์ได้ ตัวอักษรในตารางอักษรรูมีและยาวีมีขนาดใหญ่ แตะเพื่อฟังเสียงได้</li>
+  <h2>${hBi("Untuk Guru", "สำหรับครู")}</h2>
+  <ul class="bul prose guru">
+    ${[
+      ["Butang pembesar suara menggunakan suara bahasa Melayu pada peranti (sistem baca teks telefon atau komputer). Jika peranti tiada suara bahasa Melayu, sistem akan menggunakan suara bahasa Indonesia. Guru digalakkan menyebut perkataan untuk murid, dan menggunakan butang ini untuk ulang kaji.",
+       "ปุ่มลำโพงใช้เสียงอ่านภาษามลายูของเครื่อง (ระบบอ่านออกเสียงของโทรศัพท์หรือคอมพิวเตอร์) ถ้าเครื่องไม่มีเสียงภาษามลายู ระบบจะใช้เสียงภาษาอินโดนีเซียแทน ครูควรออกเสียงให้นักเรียนฟังเป็นหลัก และใช้ปุ่มนี้เพื่อทบทวน"],
+      ["Setiap latihan dalam laman web ini sama dengan buku (fail Word). Butang “Lihat jawapan” di bawah setiap soalan digunakan untuk menyemak jawapan selepas selesai menjawab.",
+       "แบบฝึกหัดในเว็บไซต์ตรงกับหนังสือเล่ม (ไฟล์ Word) ทุกข้อ ปุ่ม “ดูเฉลย” ใต้แต่ละข้อใช้ตรวจคำตอบหลังทำเสร็จแล้ว"],
+      ["“Kuiz Kendiri” dan “Kad Imbas” di akhir pelajaran dipilih secara rawak daripada perkataan pelajaran itu, sesuai untuk ulang kaji di rumah.",
+       "“ทดสอบตนเอง” และ “บัตรคำ” ท้ายบทสุ่มจากคำศัพท์ของบทนั้น เหมาะสำหรับทบทวนที่บ้าน"],
+      ["Laman web ini boleh dipaparkan melalui projektor. Huruf dalam jadual huruf Rumi dan Jawi bersaiz besar dan boleh disentuh untuk mendengar sebutan.",
+       "เปิดบนโปรเจกเตอร์ได้ ตัวอักษรในตารางอักษรรูมีและยาวีมีขนาดใหญ่ แตะเพื่อฟังเสียงได้"],
+    ].map(([m, t]) => `<li><p lang="ms">${m}</p><p class="tr">${t}</p></li>`).join("\n    ")}
   </ul>
 </section>`;
-  return page({ title: "หนังสือเรียนภาษามลายู อต.1 — Buku Teks Bahasa Melayu Tahun 1", desc: "หนังสือเรียนภาษามลายู ชั้นปีที่ 1 หลักสูตรอิสลามศึกษาตอนต้น พร้อมเสียงคำศัพท์ แบบฝึกหัด และแบบทดสอบตนเอง", base: "", body, current: "" });
+  return page({ title: "หนังสือเรียนภาษามลายู อต.1 — Buku Teks Bahasa Melayu Tahun 1", desc: "หนังสือเรียนภาษามลายู ชั้นปีที่ 1 หลักสูตรอิสลามศึกษาตอนต้น พร้อมเสียงคำศัพท์ แบบฝึกหัด และแบบทดสอบตนเอง", base: "", body, current: "utama" });
 }
 
 // ---------------------------------------------------------------- อภิธานศัพท์
@@ -249,10 +261,10 @@ function glosariPage() {
   const all = [...map.values()].sort((a, b) => a.ms.localeCompare(b.ms, "ms"));
   const rows = all.map((v) => `<tr data-q="${esc((v.ms + " " + v.th).toLowerCase())}"><td class="ms"><span>${esc(v.ms)}</span>${speakBtn(v.ms)}</td><td class="jw-cell">${v.jw ? md(v.jw) : ""}</td><td>${esc(v.th)}</td><td class="n"><a href="pelajaran/${pad(v.unit)}.html">${thNum(v.unit)}</a></td></tr>`).join("");
   const body = `
-<header class="unit-head"><p class="kicker">Glosari</p><h1>อภิธานศัพท์</h1><p class="th-title">คำศัพท์ทั้งหมด ${thNum(all.length)} คำ เรียงตามตัวอักษร</p></header>
-<label class="search"><span>ค้นหาคำ (ภาษามลายูหรือภาษาไทย)</span><input type="search" id="g-q" placeholder="เช่น mata หรือ ครู" autocomplete="off"></label>
+<header class="unit-head"><p class="kicker">Glosari · อภิธานศัพท์</p><h1>Glosari</h1><p class="th-title">อภิธานศัพท์</p><p class="hint">${bi(`Semua perkataan: ${all.length}, disusun mengikut abjad`, `คำศัพท์ทั้งหมด ${thNum(all.length)} คำ เรียงตามตัวอักษร`)}</p></header>
+<label class="search"><span>${bi("Cari perkataan (bahasa Melayu atau bahasa Thai)", "ค้นหาคำ (ภาษามลายูหรือภาษาไทย)")}</span><input type="search" id="g-q" placeholder="cth. mata / เช่น ครู" autocomplete="off"></label>
 <p class="hint" id="g-count" aria-live="polite"></p>
-<div class="tbl"><table class="vocab" id="g-table"><thead><tr><th>Rumi</th><th>Jawi</th><th>ความหมาย</th><th>บทที่</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+<div class="tbl"><table class="vocab" id="g-table"><thead><tr><th>Rumi</th><th>Jawi</th><th>Maksud · ความหมาย</th><th>Pelajaran · บทที่</th></tr></thead><tbody>${rows}</tbody></table></div>`;
   return { html: page({ title: "อภิธานศัพท์ — Bahasa Melayu อต.1", desc: "อภิธานศัพท์ภาษามลายู–ไทย ชั้น อต.1", base: "", body, current: "glosari" }), all };
 }
 
