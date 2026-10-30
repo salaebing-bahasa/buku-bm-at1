@@ -188,6 +188,11 @@ ${body}
 `;
 }
 
+// ---------------------------------------------------------------- ส่วนประกอบแบบหนังสือ
+const ORN = '<p class="orn" aria-hidden="true"><span></span></p>';
+const running = (right) => `<p class="running" aria-hidden="true"><span lang="ms">${BOOK_MS}</span><span>${right}</span></p>`;
+const folio = (f) => `<p class="folio" aria-hidden="true"><span>${f}</span></p>`;
+
 // ---------------------------------------------------------------- หน้าบทเรียน
 function unitPage(u, i) {
   const n = i + 1;
@@ -208,9 +213,13 @@ function unitPage(u, i) {
   <div class="cards" data-vocab="${esc(JSON.stringify(vocab))}"></div>
 </section>` : "";
   const body = `
-<nav class="crumb" aria-label="Lokasi · ตำแหน่ง"><p lang="ms"><a href="../index.html">Laman Utama</a> / <a href="../index.html#pelajaran">Pelajaran</a> / <span>Pelajaran ${n}</span></p><p class="tr"><a href="../index.html">หน้าแรก</a> / <a href="../index.html#pelajaran">บทเรียน</a> / <span>บทที่ ${thNum(n)}</span></p></nav>
-<header class="unit-head">
-  <p class="kicker">${bi(`Pelajaran ${n}`, `บทที่ ${thNum(n)}`)}</p>
+<nav class="crumb" aria-label="Lokasi · ตำแหน่ง"><p lang="ms"><a href="../index.html">Laman Utama</a> / <a href="../index.html#pelajaran">Kandungan</a> / <span>Pelajaran ${n}</span></p><p class="tr"><a href="../index.html">หน้าแรก</a> / <a href="../index.html#pelajaran">สารบัญ</a> / <span>บทที่ ${thNum(n)}</span></p></nav>
+<article class="sheet">
+${running(`Pelajaran ${n} · ${esc(plain(u.title))}`)}
+<header class="opener">
+  <p class="op-k">${bi("Pelajaran", "บทที่")}</p>
+  <p class="op-n" aria-hidden="true">${n}</p>
+  ${ORN}
   <h1>${md(u.title)}</h1>
   <p class="th-title">${md(u.th)}</p>
   <ul class="chips" aria-label="Petunjuk · ตัวชี้วัด">${chips}</ul>
@@ -221,10 +230,13 @@ ${sections}
 <section class="sec" id="latihan"><h3>${hBi("Latihan", "แบบฝึกหัด")}</h3>${renderLatihan(u.latihan)}</section>
 ${quiz}
 <aside class="box nilai"><p class="box-t">${bi("Nilai Murni", "ข้อคิด")}</p>${u.nilai_ms ? `<p lang="ms">${md(u.nilai_ms)}</p><p class="tr nilai-th">${md(u.nilai)}</p>` : `<p>${md(u.nilai)}</p>`}</aside>
+${folio(n)}
+</article>
 <nav class="pager" aria-label="Pelajaran sebelum dan seterusnya · บทก่อนหน้าและถัดไป">
-  ${prev ? `<a class="prev" href="${pad(n - 1)}.html"><small>${bi("Pelajaran sebelum", "บทก่อนหน้า")}</small>${esc(prev.title)}</a>` : "<span></span>"}
-  ${next ? `<a class="next" href="${pad(n + 1)}.html"><small>${bi("Pelajaran seterusnya", "บทถัดไป")}</small>${esc(next.title)}</a>` : `<a class="next" href="../glosari.html"><small>${bi("Akhir buku", "ท้ายเล่ม")}</small>${bi("Glosari", "อภิธานศัพท์")}</a>`}
-</nav>`;
+  ${prev ? `<a class="prev" href="${pad(n - 1)}.html" rel="prev"><small>${bi("← Pelajaran sebelum", "บทก่อนหน้า")}</small>${esc(prev.title)}</a>` : `<a class="prev" href="../index.html#pelajaran"><small>${bi("← Kandungan", "สารบัญ")}</small>${bi("Kandungan", "สารบัญ")}</a>`}
+  ${next ? `<a class="next" href="${pad(n + 1)}.html" rel="next"><small>${bi("Pelajaran seterusnya →", "บทถัดไป")}</small>${esc(next.title)}</a>` : `<a class="next" href="../glosari.html"><small>${bi("Akhir buku →", "ท้ายเล่ม")}</small>${bi("Glosari", "อภิธานศัพท์")}</a>`}
+</nav>
+<p class="swipe-hint">${bi("Leret ke kiri atau ke kanan untuk menukar pelajaran", "ปัดซ้ายหรือขวาเพื่อเปลี่ยนบท")}</p>`;
   const objMs = u.objectives.map((o) => plain(msPart(o))).join("; ");
   const ld = {
     "@context": "https://schema.org", "@type": "LearningResource",
@@ -243,48 +255,73 @@ ${quiz}
 
 // ---------------------------------------------------------------- หน้าแรก
 function indexPage(words) {
-  const cards = book.units.map((u, i) => `<li><a href="pelajaran/${pad(i + 1)}.html"><span class="c-num">${thNum(i + 1)}</span><span class="c-title">${md(u.title)}</span><span class="c-th">${md(u.th)}</span></a></li>`).join("");
   const map = book.indicators.map((ind, k) => {
     const us = book.units.map((u, i) => (u.indicators.includes(k + 1) ? i + 1 : 0)).filter(Boolean);
     return `<tr><td class="code">อต.${thNum(book.grade)}/${thNum(k + 1)}</td><td><span lang="ms">${md(book.indicators_ms[k])}</span><span class="td-th">${md(ind)}</span></td><td>${us.map((x) => `<a href="pelajaran/${pad(x)}.html">${thNum(x)}</a>`).join(" ")}</td></tr>`;
   }).join("");
+  const toc = [
+    ...book.units.map((u, i) => `<li><a href="pelajaran/${pad(i + 1)}.html"><span class="toc-k">${bi(`Pelajaran ${i + 1}`, `บทที่ ${thNum(i + 1)}`)}</span><span class="toc-t">${md(u.title)}<small>${md(u.th)}</small></span><span class="toc-dots"></span><span class="toc-pg">${i + 1}</span></a></li>`),
+  ].join("");
+  const extra = [["#pengenalan", "Kata Pengantar", "คำนำ", "ii"], ["#standard", "Standard dan Petunjuk", "มาตรฐานและตัวชี้วัด", "iii"], ["#guru", "Untuk Guru", "สำหรับครู", "iv"]]
+    .map(([h, m, t, f]) => `<li class="toc-front"><a href="${h}"><span class="toc-t"><span lang="ms">${m}</span><small>${t}</small></span><span class="toc-dots"></span><span class="toc-pg">${f}</span></a></li>`).join("");
   const body = `
-<section class="hero">
-  <div class="hero-text">
-    <p class="kicker"><span lang="ms">Kurikulum Pendidikan Islam Peringkat Awal · Tahun 1</span><br>หลักสูตรอิสลามศึกษาตอนต้น · ชั้นปีที่ 1</p>
-    <h1>หนังสือเรียนภาษามลายู<span class="ms-title">Buku Teks Bahasa Melayu</span></h1>
-    <p class="jw jw-title" lang="ms-Arab" dir="rtl">بوکو تيکس بهاس ملايو</p>
-    ${pBi("Belajar huruf Rumi dan huruf Jawi, huruf vokal, suku kata dan perkataan di sekeliling kita dalam 9 pelajaran. Setiap pelajaran disertakan sebutan perkataan yang boleh didengar, latihan beserta jawapan, dan kuiz kendiri. Seluruh buku menggunakan bahasa Melayu standard.", "เรียนอักษรรูมีและอักษรยาวี สระ พยางค์ และคำศัพท์ใกล้ตัว 9 บท ทุกบทฟังเสียงคำศัพท์ได้ มีแบบฝึกหัดพร้อมเฉลย และแบบทดสอบตนเอง ใช้ภาษามลายูมาตรฐานทั้งเล่ม", "lede")}
-    <div class="actions"><a class="btn" href="pelajaran/01.html">${bi("Mula Pelajaran 1", "เริ่มบทที่ 1")}</a><a class="btn-ghost" href="#pelajaran">${bi("Semua Pelajaran", "ดูบทเรียนทั้งหมด")}</a></div>
+<section class="cover-wrap">
+  <div class="cover">
+    <div class="cv-frame">
+      <p class="cv-top"><span lang="ms">Kurikulum Pendidikan Islam Peringkat Awal</span><span class="cv-th">หลักสูตรอิสลามศึกษาตอนต้น</span></p>
+      <div class="cv-mid">
+        <p class="cv-year"><span lang="ms">Tahun 1</span> · อต.1</p>
+        <h1><span lang="ms">Buku Teks<br>Bahasa Melayu</span></h1>
+        <p class="cv-jw" lang="ms-Arab" dir="rtl">بوکو تيکس بهاس ملايو</p>
+        <p class="cv-th-title">หนังสือเรียนภาษามลายู</p>
+      </div>
+      <p class="cv-author"><span lang="ms">Asst. Prof. Muhammad Salaebing</span><span class="cv-th">ผศ.มูหำหมัด สาแลบิง</span></p>
+    </div>
   </div>
-  <figure class="word" aria-live="polite">
-    <p class="word-label">${bi("Perkataan hari ini", "คำศัพท์วันนี้")}</p>
-    <p class="w-ms" id="w-ms">—</p>
-    <p class="w-jw jw" id="w-jw" lang="ms-Arab" dir="rtl"></p>
-    <p class="w-th" id="w-th"></p>
-    <div class="word-foot"><button type="button" class="btn-ghost" id="w-say">${SPEAK_ICON}<span>${bi("Dengar", "ฟังเสียง")}</span></button><button type="button" class="btn-ghost" id="w-next">${bi("Perkataan lain", "คำอื่น")}</button></div>
-  </figure>
+  <div class="cover-side">
+    ${pBi("Belajar huruf Rumi dan huruf Jawi, huruf vokal, suku kata dan perkataan di sekeliling kita dalam 9 pelajaran. Setiap pelajaran disertakan sebutan perkataan yang boleh didengar, latihan beserta jawapan, dan kuiz kendiri. Seluruh buku menggunakan bahasa Melayu standard.", "เรียนอักษรรูมีและอักษรยาวี สระ พยางค์ และคำศัพท์ใกล้ตัว 9 บท ทุกบทฟังเสียงคำศัพท์ได้ มีแบบฝึกหัดพร้อมเฉลย และแบบทดสอบตนเอง ใช้ภาษามลายูมาตรฐานทั้งเล่ม", "lede")}
+    <div class="actions"><a class="btn" href="#pelajaran">${bi("Buka buku", "เปิดหนังสือ")}</a><a class="btn-ghost" href="pelajaran/01.html">${bi("Mula Pelajaran 1", "เริ่มบทที่ 1")}</a></div>
+    <figure class="word" aria-live="polite">
+      <p class="word-label">${bi("Perkataan hari ini", "คำศัพท์วันนี้")}</p>
+      <p class="w-ms" id="w-ms">—</p>
+      <p class="w-jw jw" id="w-jw" lang="ms-Arab" dir="rtl"></p>
+      <p class="w-th" id="w-th"></p>
+      <div class="word-foot"><button type="button" class="btn-ghost" id="w-say">${SPEAK_ICON}<span>${bi("Dengar", "ฟังเสียง")}</span></button><button type="button" class="btn-ghost" id="w-next">${bi("Perkataan lain", "คำอื่น")}</button></div>
+    </figure>
+  </div>
   <script type="application/json" id="words">${JSON.stringify(words).replace(/</g, "\\u003c")}</script>
 </section>
 
-<section class="block" id="pelajaran">
-  <h2>${hBi("9 Pelajaran", "บทเรียน 9 บท")}</h2>
-  <ol class="unit-cards">${cards}</ol>
-</section>
+<article class="sheet" id="pelajaran">
+  ${running(bi("Kandungan", "สารบัญ"))}
+  <h2 class="sheet-title">${hBi("Kandungan", "สารบัญ")}</h2>
+  ${ORN}
+  <ol class="toc">${extra}${toc}<li class="toc-front"><a href="glosari.html"><span class="toc-t"><span lang="ms">Glosari</span><small>อภิธานศัพท์</small></span><span class="toc-dots"></span><span class="toc-pg">A–Z</span></a></li></ol>
+  ${folio("i")}
+</article>
 
-<section class="block" id="pengenalan">
-  <h2>${hBi("Kata Pengantar", "คำนำ")}</h2>
+<article class="sheet" id="pengenalan">
+  ${running(bi("Kata Pengantar", "คำนำ"))}
+  <h2 class="sheet-title">${hBi("Kata Pengantar", "คำนำ")}</h2>
+  ${ORN}
   ${book.preface.map((p, i) => pBi(md(book.preface_ms[i]), md(p), "prose")).join("")}
-</section>
+  <p class="sign"><span lang="ms">Asst. Prof. Muhammad Salaebing</span><span class="tr">ผศ.มูหำหมัด สาแลบิง · ผู้เรียบเรียง</span></p>
+  ${folio("ii")}
+</article>
 
-<section class="block" id="standard">
-  <h2>${hBi("Standard dan Petunjuk", "มาตรฐานและตัวชี้วัด")}</h2>
+<article class="sheet" id="standard">
+  ${running(bi("Standard dan Petunjuk", "มาตรฐานและตัวชี้วัด"))}
+  <h2 class="sheet-title">${hBi("Standard dan Petunjuk", "มาตรฐานและตัวชี้วัด")}</h2>
+  ${ORN}
   <aside class="box"><p class="box-t">${bi("Standard Bahasa Melayu", "มาตรฐาน มย")}</p><p lang="ms">Menggunakan proses mendengar, bertutur, membaca dan menulis serta memahami prinsip penggunaan bahasa Melayu untuk berkomunikasi, belajar, meningkatkan nilai kehidupan seharian dan mencari ilmu daripada sumber pembelajaran secara kreatif, serta mempunyai tabiat suka membaca.</p><p class="tr">ใช้กระบวนการฟัง พูด อ่าน เขียน เข้าใจหลักการในการใช้ภาษามลายูเพื่อการสื่อสาร การเรียนรู้ เพิ่มคุณค่าในการดำรงชีวิตประจำวันและศึกษาค้นคว้าความรู้จากแหล่งเรียนรู้อย่างสร้างสรรค์ และมีนิสัยรักการอ่าน</p></aside>
   <div class="tbl"><table class="map"><thead><tr><th>${bi("Kod", "รหัส")}</th><th>${bi("Petunjuk Tahun 1", "ตัวชี้วัดชั้นปีที่ 1")}</th><th>${bi("Pelajaran", "บทที่")}</th></tr></thead><tbody>${map}</tbody></table></div>
-</section>
+  ${folio("iii")}
+</article>
 
-<section class="block" id="guru">
-  <h2>${hBi("Untuk Guru", "สำหรับครู")}</h2>
+<article class="sheet" id="guru">
+  ${running(bi("Untuk Guru", "สำหรับครู"))}
+  <h2 class="sheet-title">${hBi("Untuk Guru", "สำหรับครู")}</h2>
+  ${ORN}
   <ul class="bul prose guru">
     ${[
       ["Butang pembesar suara menggunakan suara bahasa Melayu pada peranti (sistem baca teks telefon atau komputer). Jika peranti tiada suara bahasa Melayu, sistem akan menggunakan suara bahasa Indonesia. Guru digalakkan menyebut perkataan untuk murid, dan menggunakan butang ini untuk ulang kaji.",
@@ -297,7 +334,8 @@ function indexPage(words) {
        "เปิดบนโปรเจกเตอร์ได้ ตัวอักษรในตารางอักษรรูมีและยาวีมีขนาดใหญ่ แตะเพื่อฟังเสียงได้"],
     ].map(([m, t]) => `<li><p lang="ms">${m}</p><p class="tr">${t}</p></li>`).join("\n    ")}
   </ul>
-</section>`;
+  ${folio("iv")}
+</article>`;
   return page({
     title: `${BOOK_MS} · ${BOOK_TH} — Kurikulum Pendidikan Islam Peringkat Awal · หลักสูตรอิสลามศึกษาตอนต้น`,
     desc: "Buku teks Bahasa Melayu Tahun 1 dalam tulisan Rumi dan Jawi: 9 pelajaran, sebutan audio, latihan, kuiz dan PDF. หนังสือเรียนภาษามลายู ชั้นปีที่ 1 (อต.1) หลักสูตรอิสลามศึกษาตอนต้น อักษรรูมีและยาวี 9 บท พร้อมเสียงอ่าน แบบฝึกหัด แบบทดสอบ และ PDF",
@@ -319,10 +357,14 @@ function glosariPage() {
   const all = [...map.values()].sort((a, b) => a.ms.localeCompare(b.ms, "ms"));
   const rows = all.map((v) => `<tr data-q="${esc((v.ms + " " + v.th).toLowerCase())}"><td class="ms"><span>${esc(v.ms)}</span>${speakBtn(v.ms)}</td><td class="jw-cell">${v.jw ? md(v.jw) : ""}</td><td>${esc(v.th)}</td><td class="n"><a href="pelajaran/${pad(v.unit)}.html">${thNum(v.unit)}</a></td></tr>`).join("");
   const body = `
-<header class="unit-head"><h1>Glosari</h1><p class="th-title">อภิธานศัพท์</p><p class="hint">${bi(`Semua perkataan: ${all.length}, disusun mengikut abjad`, `คำศัพท์ทั้งหมด ${thNum(all.length)} คำ เรียงตามตัวอักษร`)}</p></header>
+<article class="sheet">
+${running(bi("Glosari", "อภิธานศัพท์"))}
+<header class="unit-head opener"><p class="op-k">${bi("Akhir buku", "ท้ายเล่ม")}</p><h1>Glosari</h1><p class="th-title">อภิธานศัพท์</p><p class="hint">${bi(`Semua perkataan: ${all.length}, disusun mengikut abjad`, `คำศัพท์ทั้งหมด ${thNum(all.length)} คำ เรียงตามตัวอักษร`)}</p></header>
 <label class="search"><span>${bi("Cari perkataan (bahasa Melayu atau bahasa Thai)", "ค้นหาคำ (ภาษามลายูหรือภาษาไทย)")}</span><input type="search" id="g-q" placeholder="cth. mata · เช่น ครู" autocomplete="off"></label>
 <p class="hint" id="g-count" aria-live="polite"></p>
-<div class="tbl"><table class="vocab" id="g-table"><thead><tr><th>Rumi</th><th>Jawi</th><th>${bi("Maksud", "ความหมาย")}</th><th>${bi("Pelajaran", "บทที่")}</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+<div class="tbl"><table class="vocab" id="g-table"><thead><tr><th>Rumi</th><th>Jawi</th><th>${bi("Maksud", "ความหมาย")}</th><th>${bi("Pelajaran", "บทที่")}</th></tr></thead><tbody>${rows}</tbody></table></div>
+${folio("A–Z")}
+</article>`;
   return { html: page({
     title: `Glosari · อภิธานศัพท์ภาษามลายู–ไทย — ${BOOK_MS} · ${BOOK_TH}`,
     desc: `Glosari bahasa Melayu–Thai: ${all.length} perkataan dalam tulisan Rumi dan Jawi beserta sebutan. อภิธานศัพท์ภาษามลายู–ไทย ${all.length} คำ อักษรรูมีและยาวี พร้อมเสียงอ่าน`,

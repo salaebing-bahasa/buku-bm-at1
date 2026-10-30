@@ -138,6 +138,28 @@
     document.getElementById("w-say").addEventListener("click", function () { say(list[k].ms, this); });
   }
 
+  // ---------- ปัดซ้าย/ขวาเพื่อเปลี่ยนบท (มือถือ) ----------
+  var pager = document.querySelector(".pager");
+  var mainEl = document.querySelector("main");
+  if (pager && mainEl) {
+    var sx = 0, sy = 0, st = 0, ok = false;
+    document.addEventListener("touchstart", function (e) {
+      if (e.touches.length !== 1) { ok = false; return; }
+      ok = !e.target.closest(".tbl, .cards, .quiz, .letters, input, textarea, button");
+      sx = e.touches[0].clientX; sy = e.touches[0].clientY; st = Date.now();
+    }, { passive: true });
+    document.addEventListener("touchend", function (e) {
+      if (!ok) return;
+      var t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+      if (Math.abs(dx) < 90 || Math.abs(dx) < 2.2 * Math.abs(dy) || Date.now() - st > 700) return;
+      var a = pager.querySelector(dx < 0 ? ".next" : ".prev");
+      if (!a || !a.href) return;
+      mainEl.classList.add(dx < 0 ? "turn-next" : "turn-prev");
+      setTimeout(function () { location.href = a.href; }, 200);
+    }, { passive: true });
+    window.addEventListener("pageshow", function () { mainEl.classList.remove("turn-next", "turn-prev"); });
+  }
+
   // ---------- ค้นหาอภิธานศัพท์ ----------
   var q = document.getElementById("g-q");
   if (q) {
