@@ -83,12 +83,15 @@ th .bi > .tr { color: inherit; opacity: .85; font-size: .85em; }
 .guru li p.tr { margin: .2rem 0 .7rem; }
 .td-th { display: block; color: var(--ink-soft); font-size: .95em; }
 .sc-th { display: block; font-size: .6em; color: var(--ink-soft); }
-.site-foot .foot-ms p { font: 500 1rem/1.5 var(--f-head); color: var(--green); }
-.site-foot .foot-th { margin-top: .8rem; padding-top: .8rem; border-top: 1px dashed var(--line); max-width: 60rem; margin-left: auto; margin-right: auto; }
-.site-foot .foot-th p { font: 400 .95rem/1.6 var(--f-body); color: var(--gold); }
-main { max-width: 1100px; margin: 0 auto; padding: 1.5rem 16px 3rem; }
-.site-foot { border-top: 1px solid var(--line); padding: 1.5rem 16px 2.5rem; text-align: center; color: var(--ink-soft); font-size: .95rem; }
-.site-foot p { margin: .2rem 0; }
+/* ท้ายเว็บ: แถบมลายู (เขียวเข้ม) + แถบไทย (ทองอ่อน) */
+.site-foot { margin-top: 2rem; text-align: center; border-top: 4px solid #B8860B; }
+.site-foot p { margin: .15rem 0; }
+.site-foot .foot-ms { background: #143F2B; color: #FFFFFF; padding: 1.3rem 16px 1.1rem; }
+.site-foot .foot-ms p { font: 500 1rem/1.55 var(--f-head); color: #FFFFFF; }
+.site-foot .foot-ms p:first-child { font-weight: 600; font-size: 1.05rem; color: #F2D88B; }
+.site-foot .foot-th { background: #F5EBD2; padding: 1.1rem 16px 1.6rem; }
+.site-foot .foot-th p { font: 400 .98rem/1.6 var(--f-body); color: #4A3608; }
+.site-foot .foot-th p:first-child { font-weight: 600; color: #143F2B; }
 
 /* ปุ่ม */
 .btn, .btn-ghost { display: inline-flex; align-items: center; gap: .45rem; border-radius: 999px; padding: .55rem 1.2rem; font: 600 1rem var(--f-body); text-decoration: none; cursor: pointer; border: 2px solid var(--green); }
