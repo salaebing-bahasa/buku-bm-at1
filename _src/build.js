@@ -142,6 +142,8 @@ function page({ title, desc, base, body, current, path: urlPath, ld }) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://gc.zgo.at; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://${GOATCOUNTER}.goatcounter.com; connect-src 'self' https://${GOATCOUNTER}.goatcounter.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
 <link rel="canonical" href="${url}">
@@ -179,10 +181,11 @@ ${body}
   <div class="foot-th">
     <p>หนังสือเรียนภาษามลายู ชั้นปีที่ 1 (อต.1) หลักสูตรอิสลามศึกษาตอนต้น</p>
     <p>เรียบเรียงโดย ผศ.มูหำหมัด สาแลบิง · สาขาวิชาภาษามลายู คณะมนุษยศาสตร์และสังคมศาสตร์ มหาวิทยาลัยทักษิณ</p>
+    <p class="copy">© ${new Date().getFullYear()} Muhammad Salaebing · <span lang="ms">Hak cipta terpelihara</span> · สงวนลิขสิทธิ์</p>
   </div>
 </footer>
 <script src="${base}assets/app.js"></script>
-<script data-goatcounter="https://${GOATCOUNTER}.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script data-goatcounter="https://${GOATCOUNTER}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>
 </html>
 `;
