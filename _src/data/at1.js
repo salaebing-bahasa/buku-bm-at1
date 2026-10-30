@@ -62,6 +62,7 @@ module.exports = {
         { q: "เขียนอักษรพิมพ์เล็กที่หายไป", items: ["a  b  c  ___  e", "f  ___  h  i  j", "o  p  ___  r  s"], answers: "d, g, q" },
       ],
       nilai: "อักษรรูมีเป็นกุญแจดอกแรกของการอ่านภาษามลายู ฝึกอ่านทุกวันวันละนิด แล้วจะอ่านหนังสือได้คล่องขึ้น",
+      nilai_ms: "Huruf Rumi ialah kunci pertama untuk membaca dalam bahasa Melayu. Berlatihlah membaca sedikit setiap hari, nescaya kamu dapat membaca buku dengan lebih lancar.",
     },
     // ---------------------------------------------------------------- 2
     {
@@ -101,6 +102,7 @@ module.exports = {
         { q: "ตอบคำถาม", items: ["อักษรยาวีเขียนจากด้านใดไปด้านใด  ________________", "อักษรยาวีตัวแรกคือ  ________  ตัวสุดท้ายในตารางคือ  ________"], answers: "จากขวาไปซ้าย; alif (ا) และ ye (ى)" },
       ],
       nilai: "อักษรยาวีเป็นมรดกของชาวมลายูและใช้เขียนตำราศาสนามาช้านาน การรู้อักษรยาวีช่วยให้เราอ่านหนังสือศาสนาและเข้าใจวัฒนธรรมของเราเอง",
+      nilai_ms: "Tulisan Jawi ialah warisan orang Melayu dan telah lama digunakan untuk menulis kitab agama. Dengan mengenal tulisan Jawi, kita dapat membaca kitab agama dan memahami budaya kita sendiri.",
     },
     // ---------------------------------------------------------------- 3
     {
@@ -144,6 +146,7 @@ module.exports = {
         { q: "จับคู่กับคู่ อ่านคำให้เพื่อนฟัง แล้วสลับกัน", items: ["api  •  ayam  •  ikan  •  ibu  •  ular  •  ubi"] },
       ],
       nilai: "การออกเสียงสระให้ชัดเจนทำให้ผู้ฟังเข้าใจเราได้ถูกต้อง ทั้งเวลาพูดภาษามลายูและเวลาอ่านอัลกุรอาน",
+      nilai_ms: "Menyebut huruf vokal dengan jelas membolehkan pendengar memahami kita dengan betul, sama ada semasa bertutur dalam bahasa Melayu atau semasa membaca al-Quran.",
     },
     // ---------------------------------------------------------------- 4
     {
@@ -194,6 +197,7 @@ module.exports = {
         { q: "คัดคำต่อไปนี้ด้วยอักษรรูมีและยาวี คำละ 3 ครั้ง", items: ["Islam  /  اسلام", "doa  /  دعا"], lines: 3 },
       ],
       nilai: "คำศัพท์ศาสนาหลายคำ เช่น solat, doa, wuduk เราใช้ทุกวัน เมื่ออ่านและเขียนได้ถูกต้อง เราก็จดจำคำสอนของศาสนาได้ดีขึ้น",
+      nilai_ms: "Banyak perkataan agama seperti solat, doa dan wuduk kita gunakan setiap hari. Apabila kita dapat membaca dan menulisnya dengan betul, kita lebih mudah mengingati ajaran agama.",
     },
     // ---------------------------------------------------------------- 5
     {
@@ -240,6 +244,7 @@ module.exports = {
         { q: "นำพยางค์มาต่อกันให้เป็นคำ แล้วเขียนความหมาย", items: ["da + hi  =  ________  (________)", "pe + rut  =  ________  (________)", "gi + gi  =  ________  (________)"], answers: "dahi (หน้าผาก), perut (ท้อง), gigi (ฟัน)" },
       ],
       nilai: "การอ่านทีละพยางค์ช่วยให้เราอ่านคำยาว ๆ ได้ อย่าท้อเมื่ออ่านยังไม่คล่อง ค่อย ๆ อ่านทีละพยางค์",
+      nilai_ms: "Membaca suku kata demi suku kata membantu kita membaca perkataan yang panjang. Jangan berputus asa jika belum lancar membaca; bacalah perlahan-lahan suku kata demi suku kata.",
     },
     // ---------------------------------------------------------------- 6
     {
@@ -282,6 +287,7 @@ module.exports = {
         { q: "เกม \"Saya kata\" (ครูพูดชื่ออวัยวะ นักเรียนชี้ให้ถูก)", items: ["Pegang kepala!  •  Pegang hidung!  •  Pegang telinga!  •  Angkat tangan!"] },
       ],
       nilai: "ร่างกายเป็นอะมานะฮ์ (สิ่งที่อัลลอฮ์ทรงฝากไว้) เราต้องดูแลให้สะอาดและใช้ทำแต่สิ่งดี",
+      nilai_ms: "Tubuh badan ialah amanah (sesuatu yang diamanahkan oleh Allah kepada kita). Kita mesti menjaga kebersihannya dan menggunakannya untuk melakukan perkara yang baik sahaja.",
     },
     // ---------------------------------------------------------------- 7
     {
@@ -321,6 +327,7 @@ module.exports = {
         { q: "วาดภาพครอบครัวของตนเอง แล้วแนะนำให้เพื่อนฟังด้วยประโยค \"Ini ... saya.\"", lines: 2 },
       ],
       nilai: "อิสลามสอนให้เราเชื่อฟังและทำดีต่อพ่อแม่ (birrul walidain) และรักพี่น้องในครอบครัว",
+      nilai_ms: "Islam mengajar kita supaya taat dan berbuat baik kepada ibu bapa (birrul walidain) serta menyayangi adik-beradik dalam keluarga.",
     },
     // ---------------------------------------------------------------- 8
     {
@@ -363,6 +370,7 @@ module.exports = {
         { q: "สำรวจห้องเรียน เขียนชื่อสิ่งของที่เห็น 5 อย่างเป็นภาษามลายู", lines: 2 },
       ],
       nilai: "โรงเรียนเป็นสถานที่แสวงหาความรู้ เราควรให้เกียรติครู รักษาความสะอาดห้องเรียน และดูแลสิ่งของส่วนรวม",
+      nilai_ms: "Sekolah ialah tempat menuntut ilmu. Kita hendaklah menghormati guru, menjaga kebersihan bilik darjah dan memelihara harta benda bersama.",
     },
     // ---------------------------------------------------------------- 9
     {
@@ -403,6 +411,7 @@ module.exports = {
         { q: "ท่อง Rukun Islam ให้ครูและเพื่อนฟัง: \"Rukun Islam ada lima. Pertama ...\"" },
       ],
       nilai: "หลักการอิสลาม 5 ประการเป็นรากฐานของมุสลิม เมื่อเรารู้ความหมายเป็นภาษามลายู เราก็เข้าใจและปฏิบัติได้ดียิ่งขึ้น",
+      nilai_ms: "Rukun Islam yang lima ialah asas bagi setiap Muslim. Apabila kita mengetahui maksudnya dalam bahasa Melayu, kita lebih memahami dan dapat mengamalkannya dengan lebih baik.",
     },
   ],
 };

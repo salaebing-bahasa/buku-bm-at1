@@ -191,7 +191,7 @@ function unitPage(u, i) {
 ${sections}
 <section class="sec" id="latihan"><h3>${hBi("Latihan", "แบบฝึกหัด")}</h3>${renderLatihan(u.latihan)}</section>
 ${quiz}
-<aside class="box nilai"><p class="box-t">${bi("Nilai Murni", "ข้อคิด")}</p><p>${md(u.nilai)}</p></aside>
+<aside class="box nilai"><p class="box-t">${bi("Nilai Murni", "ข้อคิด")}</p>${u.nilai_ms ? `<p lang="ms">${md(u.nilai_ms)}</p><p class="tr nilai-th">${md(u.nilai)}</p>` : `<p>${md(u.nilai)}</p>`}</aside>
 <nav class="pager" aria-label="Pelajaran sebelum dan seterusnya · บทก่อนหน้าและถัดไป">
   ${prev ? `<a class="prev" href="${pad(n - 1)}.html"><small>${bi("Pelajaran sebelum", "บทก่อนหน้า")}</small>${esc(prev.title)}</a>` : "<span></span>"}
   ${next ? `<a class="next" href="${pad(n + 1)}.html"><small>${bi("Pelajaran seterusnya", "บทถัดไป")}</small>${esc(next.title)}</a>` : `<a class="next" href="../glosari.html"><small>${bi("Akhir buku", "ท้ายเล่ม")}</small>${bi("Glosari", "อภิธานศัพท์")}</a>`}
