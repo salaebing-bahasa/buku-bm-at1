@@ -98,6 +98,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 1.5rem 16px 3rem; }
 .site-foot .foot-th { background: #F5EBD2; padding: 1.1rem 16px 1.6rem; }
 .site-foot .foot-th p { font: 400 .98rem/1.6 var(--f-body); color: #4A3608; }
 .site-foot .foot-th p:first-child { font-weight: 600; color: #143F2B; }
+.site-foot .foot-th p.copy { margin-top: .6rem; font-size: .88rem; opacity: .85; }
 
 /* ปุ่ม */
 .btn, .btn-ghost { display: inline-flex; align-items: center; gap: .45rem; border-radius: 999px; padding: .55rem 1.2rem; font: 600 1rem var(--f-body); text-decoration: none; cursor: pointer; border: 2px solid var(--green); }
