@@ -83,6 +83,7 @@ th .bi > .tr { color: inherit; opacity: .85; font-size: .85em; }
 .guru li p.tr { margin: .2rem 0 .7rem; }
 .td-th { display: block; color: var(--ink-soft); font-size: .95em; }
 .sc-th { display: block; font-size: .6em; color: var(--ink-soft); }
+main { max-width: 1100px; margin: 0 auto; padding: 1.5rem 16px 3rem; }
 /* ท้ายเว็บ: แถบมลายู (เขียวเข้ม) + แถบไทย (ทองอ่อน) */
 .site-foot { margin-top: 2rem; text-align: center; border-top: 4px solid #B8860B; }
 .site-foot p { margin: .15rem 0; }
@@ -263,6 +264,7 @@ td.ms > span { margin-right: .3rem; }
   body { background: #fff; }
 }
 @media (max-width: 480px) {
-  .site-head nav { gap: .9rem; width: 100%; justify-content: space-between; }
-  .site-head nav a { font-size: .95rem; }
+  .site-head nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: .3rem; width: 100%; }
+  .site-head nav a { font-size: .9rem; text-align: center; }
+  .site-head nav a small { font-size: .72rem; }
 }
