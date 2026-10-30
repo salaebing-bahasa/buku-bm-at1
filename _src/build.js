@@ -33,6 +33,7 @@ const hBi = (ms, th) => `<span lang="ms">${ms}</span><span class="h-th">${th}</s
 const pBi = (ms, th, cls = "") => `<div class="dw${cls ? " " + cls : ""}"><p lang="ms">${ms}</p><p class="tr">${th}</p></div>`;
 
 const SPEAK_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+const DL_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const speakBtn = (text, label) => `<button type="button" class="say" data-say="${esc(plain(text))}" aria-label="ฟังเสียง ${esc(label || plain(text))}" title="ฟังเสียง">${SPEAK_ICON}</button>`;
 
 // ---------------------------------------------------------------- บล็อกเนื้อหา
@@ -184,6 +185,7 @@ function unitPage(u, i) {
   <h1>${md(u.title)}</h1>
   <p class="th-title">${md(u.th)}</p>
   <ul class="chips" aria-label="Petunjuk · ตัวชี้วัด">${chips}</ul>
+  <a class="btn-ghost dl" href="../pdf/pelajaran-${pad(n)}.pdf" download="Bahasa-Melayu-AT1-Pelajaran-${pad(n)}.pdf">${DL_ICON}${bi("Muat turun PDF", "ดาวน์โหลด PDF")}</a>
 </header>
 <aside class="box obj"><p class="box-t">${bi("Objektif Pembelajaran", "จุดประสงค์การเรียนรู้")}</p><ul>${u.objectives.map((o) => `<li>${md(o)}</li>`).join("")}</ul></aside>
 ${sections}
