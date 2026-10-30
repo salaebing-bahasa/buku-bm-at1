@@ -143,7 +143,7 @@ ${body}
 </main>
 <footer class="site-foot">
   <p lang="ms">Buku Teks Bahasa Melayu Tahun 1 (อต.1) Kurikulum Pendidikan Islam Peringkat Awal</p>
-  <p lang="ms">Disusun oleh Pen. Prof. Muhammad Salaebing · Program Bahasa Melayu, Fakulti Kemanusiaan dan Sains Sosial, Universiti Thaksin</p>
+  <p lang="ms">Disusun oleh Asst. Prof. Muhammad Salaebing · Program Bahasa Melayu, Fakulti Kemanusiaan dan Sains Sosial, Universiti Thaksin</p>
   <p class="foot-th">หนังสือเรียนภาษามลายู ชั้นปีที่ 1 (อต.1) หลักสูตรอิสลามศึกษาตอนต้น</p>
   <p>เรียบเรียงโดย ผศ.มูหำหมัด สาแลบิง · สาขาวิชาภาษามลายู คณะมนุษยศาสตร์และสังคมศาสตร์ มหาวิทยาลัยทักษิณ</p>
 </footer>
@@ -203,7 +203,7 @@ function indexPage(words) {
   const body = `
 <section class="hero">
   <div class="hero-text">
-    <p class="kicker"><span lang="ms">Pendidikan Islam Peringkat Awal · Tahun 1</span><br>หลักสูตรอิสลามศึกษาตอนต้น · ชั้นปีที่ 1</p>
+    <p class="kicker"><span lang="ms">Kurikulum Pendidikan Islam Peringkat Awal · Tahun 1</span><br>หลักสูตรอิสลามศึกษาตอนต้น · ชั้นปีที่ 1</p>
     <h1>หนังสือเรียนภาษามลายู<span class="ms-title">Buku Teks Bahasa Melayu</span></h1>
     <p class="jw jw-title" lang="ms-Arab" dir="rtl">بوکو تيکس بهاس ملايو</p>
     ${pBi("Belajar huruf Rumi dan huruf Jawi, huruf vokal, suku kata dan perkataan di sekeliling kita dalam 9 pelajaran. Setiap pelajaran disertakan sebutan perkataan yang boleh didengar, latihan beserta jawapan, dan kuiz kendiri. Seluruh buku menggunakan bahasa Melayu standard.", "เรียนอักษรรูมีและอักษรยาวี สระ พยางค์ และคำศัพท์ใกล้ตัว 9 บท ทุกบทฟังเสียงคำศัพท์ได้ มีแบบฝึกหัดพร้อมเฉลย และแบบทดสอบตนเอง ใช้ภาษามลายูมาตรฐานทั้งเล่ม", "lede")}

@@ -7,7 +7,7 @@ module.exports = {
     "ภาษาที่ใช้ในหนังสือเล่มนี้เป็นภาษามลายูมาตรฐาน (Bahasa Melayu Standard) ทั้งหมด ผู้เรียบเรียงหวังว่าหนังสือเล่มนี้จะเป็นประโยชน์แก่ครูและผู้เรียนในการจัดการเรียนการสอนภาษามลายู",
   ],
   preface_ms: [
-    "Buku teks Bahasa Melayu ini disediakan untuk murid Tahun 1 Kurikulum Pendidikan Islam Peringkat Awal (อต.1) berdasarkan standard มย dan petunjuk kurikulum. Buku ini bertujuan supaya murid mengenal huruf konsonan dan huruf vokal bahasa Melayu dalam tulisan Rumi dan tulisan Jawi, dapat membaca dan menulis suku kata serta perkataan asas, dan menggunakan perkataan tersebut dalam kehidupan seharian.",
+    "Buku teks Bahasa Melayu ini disediakan untuk murid Tahun 1 Kurikulum Pendidikan Islam Peringkat Awal berdasarkan standard dan petunjuk kurikulum. Buku ini bertujuan supaya murid mengenal huruf konsonan dan huruf vokal bahasa Melayu dalam tulisan Rumi dan tulisan Jawi, dapat membaca dan menulis suku kata serta perkataan asas, dan menggunakan perkataan tersebut dalam kehidupan seharian.",
     "Kandungan buku ini dibahagikan kepada 9 pelajaran, bermula dengan huruf Rumi, huruf Jawi, huruf vokal, membaca dan menulis perkataan, suku kata terbuka dan tertutup, diikuti perkataan tentang anggota badan, ahli keluarga, sekolah dan Rukun Islam. Setiap pelajaran mengandungi objektif pembelajaran, isi pelajaran, latihan dan nilai murni supaya murid menghargai penggunaan bahasa Melayu. Di bahagian akhir buku terdapat glosari dan jawapan latihan.",
     "Bahasa yang digunakan dalam buku ini ialah bahasa Melayu standard sepenuhnya. Penyusun berharap buku ini dapat memberi manfaat kepada guru dan murid dalam pengajaran dan pembelajaran bahasa Melayu.",
   ],
