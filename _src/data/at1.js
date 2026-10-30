@@ -6,6 +6,11 @@ module.exports = {
     "เนื้อหาแบ่งเป็น 9 บท เริ่มจากอักษรรูมี อักษรยาวี สระ การอ่านเขียนคำ พยางค์เปิดและพยางค์ปิด ต่อด้วยคำศัพท์หมวดอวัยวะของร่างกาย ครอบครัว โรงเรียน และหลักการอิสลาม 5 ประการ ทุกบทมีจุดประสงค์การเรียนรู้ เนื้อหา แบบฝึกหัด และข้อคิด เพื่อให้ผู้เรียนเห็นคุณค่าของการใช้ภาษามลายู ท้ายเล่มมีอภิธานศัพท์และเฉลยแบบฝึกหัด",
     "ภาษาที่ใช้ในหนังสือเล่มนี้เป็นภาษามลายูมาตรฐาน (Bahasa Melayu Standard) ทั้งหมด ผู้เรียบเรียงหวังว่าหนังสือเล่มนี้จะเป็นประโยชน์แก่ครูและผู้เรียนในการจัดการเรียนการสอนภาษามลายู",
   ],
+  preface_ms: [
+    "Buku teks Bahasa Melayu ini disediakan untuk murid Tahun 1 Kurikulum Pendidikan Islam Peringkat Awal (อต.1) berdasarkan standard มย dan petunjuk kurikulum. Buku ini bertujuan supaya murid mengenal huruf konsonan dan huruf vokal bahasa Melayu dalam tulisan Rumi dan tulisan Jawi, dapat membaca dan menulis suku kata serta perkataan asas, dan menggunakan perkataan tersebut dalam kehidupan seharian.",
+    "Kandungan buku ini dibahagikan kepada 9 pelajaran, bermula dengan huruf Rumi, huruf Jawi, huruf vokal, membaca dan menulis perkataan, suku kata terbuka dan tertutup, diikuti perkataan tentang anggota badan, ahli keluarga, sekolah dan Rukun Islam. Setiap pelajaran mengandungi objektif pembelajaran, isi pelajaran, latihan dan nilai murni supaya murid menghargai penggunaan bahasa Melayu. Di bahagian akhir buku terdapat glosari dan jawapan latihan.",
+    "Bahasa yang digunakan dalam buku ini ialah bahasa Melayu standard sepenuhnya. Penyusun berharap buku ini dapat memberi manfaat kepada guru dan murid dalam pengajaran dan pembelajaran bahasa Melayu.",
+  ],
   indicators: [
     "ฟังการออกเสียง พยัญชนะและสระภาษามลายู",
     "บอกพยัญชนะ สระภาษามลายูจากการฟัง",
@@ -13,6 +18,14 @@ module.exports = {
     "จับคู่ตัวพยัญชนะมลายูพิมพ์ใหญ่และพิมพ์เล็กที่กำหนด",
     "พูดโต้ตอบพยัญชนะ พยางค์ และคำศัพท์ภาษามลายูที่กำหนด",
     "เห็นคุณค่าการใช้ภาษามลายูที่กำหนด",
+  ],
+  indicators_ms: [
+    "Mendengar sebutan huruf konsonan dan huruf vokal bahasa Melayu",
+    "Menyebut huruf konsonan dan huruf vokal bahasa Melayu yang didengar",
+    "Membaca dan menulis huruf konsonan, huruf vokal, suku kata dan perkataan bahasa Melayu yang ditetapkan",
+    "Memadankan huruf besar dan huruf kecil bahasa Melayu yang ditetapkan",
+    "Bertutur secara bersoal jawab menggunakan huruf, suku kata dan perkataan bahasa Melayu yang ditetapkan",
+    "Menghargai penggunaan bahasa Melayu yang ditetapkan",
   ],
   units: [
     // ---------------------------------------------------------------- 1

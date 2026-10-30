@@ -57,8 +57,22 @@ strong { font-weight: 600; }
 .brand small { display: block; font: 400 .85rem var(--f-body); color: var(--ink-soft); }
 .mark { width: 34px; height: 34px; border-radius: 8px; background: var(--green) url("favicon.svg") center/cover; flex: none; }
 .site-head nav { display: flex; gap: 1.1rem; flex-wrap: wrap; }
-.site-head nav a { text-decoration: none; color: var(--ink-soft); font-weight: 600; }
+.site-head nav a { text-decoration: none; color: var(--ink-soft); font-weight: 600; display: flex; flex-direction: column; align-items: center; line-height: 1.2; }
+.site-head nav a small { font: 400 .8rem var(--f-body); }
 .site-head nav a:hover, .site-head nav a[aria-current] { color: var(--green); }
+/* สองภาษา: มลายูก่อน ไทยตามหลัง */
+.tr { color: var(--ink-soft); font-weight: 400; }
+.btn .tr, .btn-ghost .tr, .pager .tr { color: inherit; opacity: .85; }
+.h-th { display: block; font: 500 .62em/1.4 var(--f-body); color: var(--ink-soft); margin-top: .1rem; }
+.dw { margin: 0 0 1rem; }
+.dw p { margin: 0; }
+.dw p.tr { margin-top: .3rem; }
+.dw.lede p.tr { font-size: 1rem; }
+.guru li p { margin: 0; }
+.guru li p.tr { margin: .2rem 0 .7rem; }
+.td-th { display: block; color: var(--ink-soft); font-size: .95em; }
+.sc-th { display: block; font-size: .6em; color: var(--ink-soft); }
+.foot-th { margin-top: .8rem !important; }
 main { max-width: 1100px; margin: 0 auto; padding: 1.5rem 16px 3rem; }
 .site-foot { border-top: 1px solid var(--line); padding: 1.5rem 16px 2.5rem; text-align: center; color: var(--ink-soft); font-size: .95rem; }
 .site-foot p { margin: .2rem 0; }
@@ -231,4 +245,8 @@ td.ms > span { margin-right: .3rem; }
   .site-head nav, .say, .say-long, .kuiz, #kad, .pager, .site-foot { display: none; }
   .ans p { display: block; }
   body { background: #fff; }
+}
+@media (max-width: 480px) {
+  .site-head nav { gap: .9rem; width: 100%; justify-content: space-between; }
+  .site-head nav a { font-size: .95rem; }
 }
