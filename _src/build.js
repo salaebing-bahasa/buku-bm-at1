@@ -135,17 +135,21 @@ ${FONTS}
 <body>
 <a class="skip" href="#isi">${bi("Langkau ke kandungan", "ข้ามไปยังเนื้อหา")}</a>
 <header class="site-head">
-  <a class="brand" href="${base}index.html"><span class="mark" aria-hidden="true"></span><span>Bahasa Melayu อต.1<small lang="ms">Pendidikan Islam Peringkat Awal</small><small>หลักสูตรอิสลามศึกษาตอนต้น</small></span></a>
+  <a class="brand" href="${base}index.html"><span class="mark" aria-hidden="true"></span><span>Bahasa Melayu อต.1<small lang="ms">Kurikulum Pendidikan Islam Peringkat Awal</small><small>หลักสูตรอิสลามศึกษาตอนต้น</small></span></a>
   <nav aria-label="Menu utama · เมนูหลัก">${nav}</nav>
 </header>
 <main id="isi">
 ${body}
 </main>
 <footer class="site-foot">
-  <p lang="ms">Buku Teks Bahasa Melayu Tahun 1 (อต.1) Kurikulum Pendidikan Islam Peringkat Awal</p>
-  <p lang="ms">Disusun oleh Asst. Prof. Muhammad Salaebing · Program Bahasa Melayu, Fakulti Kemanusiaan dan Sains Sosial, Universiti Thaksin</p>
-  <p class="foot-th">หนังสือเรียนภาษามลายู ชั้นปีที่ 1 (อต.1) หลักสูตรอิสลามศึกษาตอนต้น</p>
-  <p>เรียบเรียงโดย ผศ.มูหำหมัด สาแลบิง · สาขาวิชาภาษามลายู คณะมนุษยศาสตร์และสังคมศาสตร์ มหาวิทยาลัยทักษิณ</p>
+  <div class="foot-ms" lang="ms">
+    <p>Buku Teks Bahasa Melayu Tahun 1 Kurikulum Pendidikan Islam Peringkat Awal</p>
+    <p>Disusun oleh Asst. Prof. Muhammad Salaebing · Program Bahasa Melayu, Fakulti Kemanusiaan dan Sains Sosial, Universiti Thaksin</p>
+  </div>
+  <div class="foot-th">
+    <p>หนังสือเรียนภาษามลายู ชั้นปีที่ 1 (อต.1) หลักสูตรอิสลามศึกษาตอนต้น</p>
+    <p>เรียบเรียงโดย ผศ.มูหำหมัด สาแลบิง · สาขาวิชาภาษามลายู คณะมนุษยศาสตร์และสังคมศาสตร์ มหาวิทยาลัยทักษิณ</p>
+  </div>
 </footer>
 <script src="${base}assets/app.js"></script>
 <script data-goatcounter="https://${GOATCOUNTER}.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
@@ -231,7 +235,7 @@ function indexPage(words) {
 
 <section class="block" id="standard">
   <h2>${hBi("Standard dan Petunjuk", "มาตรฐานและตัวชี้วัด")}</h2>
-  <aside class="box"><p class="box-t">${bi("Standard มย", "มาตรฐาน มย")}</p><p lang="ms">Menggunakan proses mendengar, bertutur, membaca dan menulis serta memahami prinsip penggunaan bahasa Melayu untuk berkomunikasi, belajar, meningkatkan nilai kehidupan seharian dan mencari ilmu daripada sumber pembelajaran secara kreatif, serta mempunyai tabiat suka membaca.</p><p class="tr">ใช้กระบวนการฟัง พูด อ่าน เขียน เข้าใจหลักการในการใช้ภาษามลายูเพื่อการสื่อสาร การเรียนรู้ เพิ่มคุณค่าในการดำรงชีวิตประจำวันและศึกษาค้นคว้าความรู้จากแหล่งเรียนรู้อย่างสร้างสรรค์ และมีนิสัยรักการอ่าน</p></aside>
+  <aside class="box"><p class="box-t">${bi("Standard Bahasa Melayu", "มาตรฐาน มย")}</p><p lang="ms">Menggunakan proses mendengar, bertutur, membaca dan menulis serta memahami prinsip penggunaan bahasa Melayu untuk berkomunikasi, belajar, meningkatkan nilai kehidupan seharian dan mencari ilmu daripada sumber pembelajaran secara kreatif, serta mempunyai tabiat suka membaca.</p><p class="tr">ใช้กระบวนการฟัง พูด อ่าน เขียน เข้าใจหลักการในการใช้ภาษามลายูเพื่อการสื่อสาร การเรียนรู้ เพิ่มคุณค่าในการดำรงชีวิตประจำวันและศึกษาค้นคว้าความรู้จากแหล่งเรียนรู้อย่างสร้างสรรค์ และมีนิสัยรักการอ่าน</p></aside>
   <div class="tbl"><table class="map"><thead><tr><th>${bi("Kod", "รหัส")}</th><th>${bi("Petunjuk Tahun 1", "ตัวชี้วัดชั้นปีที่ 1")}</th><th>${bi("Pelajaran", "บทที่")}</th></tr></thead><tbody>${map}</tbody></table></div>
 </section>
 

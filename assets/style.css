@@ -83,7 +83,9 @@ th .bi > .tr { color: inherit; opacity: .85; font-size: .85em; }
 .guru li p.tr { margin: .2rem 0 .7rem; }
 .td-th { display: block; color: var(--ink-soft); font-size: .95em; }
 .sc-th { display: block; font-size: .6em; color: var(--ink-soft); }
-.foot-th { margin-top: .8rem !important; }
+.site-foot .foot-ms p { font: 500 1rem/1.5 var(--f-head); color: var(--green); }
+.site-foot .foot-th { margin-top: .8rem; padding-top: .8rem; border-top: 1px dashed var(--line); max-width: 60rem; margin-left: auto; margin-right: auto; }
+.site-foot .foot-th p { font: 400 .95rem/1.6 var(--f-body); color: var(--gold); }
 main { max-width: 1100px; margin: 0 auto; padding: 1.5rem 16px 3rem; }
 .site-foot { border-top: 1px solid var(--line); padding: 1.5rem 16px 2.5rem; text-align: center; color: var(--ink-soft); font-size: .95rem; }
 .site-foot p { margin: .2rem 0; }
