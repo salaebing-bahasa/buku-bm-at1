@@ -5,6 +5,12 @@ const path = require("path");
 
 const ROOT = path.join(__dirname, "..");
 const GOATCOUNTER = "buku-bm-at1"; // รหัสเว็บไซต์ใน GoatCounter (สถิติผู้เข้าชม)
+const SITE = "https://salaebing-bahasa.github.io/buku-bm-at1/"; // ที่อยู่เว็บไซต์ (ใช้กับ SEO และ sitemap)
+const GOOGLE_VERIFY = ""; // รหัสยืนยันจาก Google Search Console (ถ้ามี)
+const BOOK_MS = "Buku Teks Bahasa Melayu Tahun 1";
+const BOOK_TH = "หนังสือเรียนภาษามลายู อต.1";
+const AUTHOR = { "@type": "Person", name: "Muhammad Salaebing", alternateName: "ผศ.มูหำหมัด สาแลบิง", jobTitle: "Assistant Professor", affiliation: { "@type": "CollegeOrUniversity", name: "Thaksin University", alternateName: "มหาวิทยาลัยทักษิณ" } };
+const SITEMAP = []; // หน้าที่จะใส่ใน sitemap.xml
 const book = require("./data/at1.js");
 
 const thNum = (n) => String(n); // ใช้เลขอารบิก
@@ -126,7 +132,9 @@ function unitVocab(u) {
 // ---------------------------------------------------------------- โครงหน้า
 const FONTS = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=Noto+Naskh+Arabic:wght@400;600&family=Sarabun:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">';
 
-function page({ title, desc, base, body, current }) {
+function page({ title, desc, base, body, current, path: urlPath, ld }) {
+  const url = SITE + urlPath;
+  SITEMAP.push(url);
   const nav = [["index.html", "Laman Utama", "หน้าแรก", "utama"], ["index.html#pelajaran", "Pelajaran", "บทเรียน", "pelajaran"], ["glosari.html", "Glosari", "อภิธานศัพท์", "glosari"], ["index.html#guru", "Untuk Guru", "สำหรับครู", "guru"]]
     .map(([h, m, t, k]) => `<a href="${base}${h}"${current === k ? ' aria-current="page"' : ""}><span lang="ms">${m}</span><small>${t}</small></a>`).join("");
   return `<!doctype html>
@@ -136,6 +144,20 @@ function page({ title, desc, base, body, current }) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
+<link rel="canonical" href="${url}">
+<meta name="author" content="Muhammad Salaebing (ผศ.มูหำหมัด สาแลบิง)">
+${GOOGLE_VERIFY ? `<meta name="google-site-verification" content="${esc(GOOGLE_VERIFY)}">\n` : ""}<meta property="og:type" content="website">
+<meta property="og:site_name" content="${BOOK_MS} · ${BOOK_TH}">
+<meta property="og:title" content="${esc(title)}">
+<meta property="og:description" content="${esc(desc)}">
+<meta property="og:url" content="${url}">
+<meta property="og:image" content="${SITE}assets/share.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="th_TH">
+<meta property="og:locale:alternate" content="ms_MY">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">${JSON.stringify(ld).replace(/</g, "\\u003c")}</script>
 ${FONTS}
 <link rel="stylesheet" href="${base}assets/style.css">
 <link rel="icon" href="${base}assets/favicon.svg" type="image/svg+xml">
@@ -203,7 +225,20 @@ ${quiz}
   ${prev ? `<a class="prev" href="${pad(n - 1)}.html"><small>${bi("Pelajaran sebelum", "บทก่อนหน้า")}</small>${esc(prev.title)}</a>` : "<span></span>"}
   ${next ? `<a class="next" href="${pad(n + 1)}.html"><small>${bi("Pelajaran seterusnya", "บทถัดไป")}</small>${esc(next.title)}</a>` : `<a class="next" href="../glosari.html"><small>${bi("Akhir buku", "ท้ายเล่ม")}</small>${bi("Glosari", "อภิธานศัพท์")}</a>`}
 </nav>`;
-  return page({ title: `บทที่ ${thNum(n)} ${plain(u.title)} — Bahasa Melayu อต.1`, desc: `${plain(u.title)} (${u.th}) บทเรียนภาษามลายู ชั้น อต.1`, base: "../", body, current: "pelajaran" });
+  const objMs = u.objectives.map((o) => plain(msPart(o))).join("; ");
+  const ld = {
+    "@context": "https://schema.org", "@type": "LearningResource",
+    name: `Pelajaran ${n}: ${plain(u.title)} (${u.th})`, description: objMs,
+    inLanguage: ["ms", "th"], learningResourceType: "Lesson", educationalLevel: "Tahun 1 (อต.1)",
+    teaches: plain(u.title), author: AUTHOR, isAccessibleForFree: true,
+    isPartOf: { "@type": "Book", name: `${BOOK_MS} · ${BOOK_TH}`, url: SITE },
+    encoding: { "@type": "MediaObject", encodingFormat: "application/pdf", contentUrl: `${SITE}pdf/pelajaran-${pad(n)}.pdf` },
+  };
+  return page({
+    title: `${plain(u.title)} (${u.th}) — Pelajaran ${n} | ${BOOK_MS} · ${BOOK_TH}`,
+    desc: `Pelajaran ${n} ${plain(u.title)} · บทที่ ${n} ${u.th} — ${objMs}. บทเรียนภาษามลายู ชั้น อต.1 พร้อมเสียงอ่าน แบบฝึกหัด และ PDF`,
+    base: "../", body, current: "pelajaran", path: `pelajaran/${pad(n)}.html`, ld,
+  });
 }
 
 // ---------------------------------------------------------------- หน้าแรก
@@ -263,7 +298,15 @@ function indexPage(words) {
     ].map(([m, t]) => `<li><p lang="ms">${m}</p><p class="tr">${t}</p></li>`).join("\n    ")}
   </ul>
 </section>`;
-  return page({ title: "หนังสือเรียนภาษามลายู อต.1 — Buku Teks Bahasa Melayu Tahun 1", desc: "หนังสือเรียนภาษามลายู ชั้นปีที่ 1 หลักสูตรอิสลามศึกษาตอนต้น พร้อมเสียงคำศัพท์ แบบฝึกหัด และแบบทดสอบตนเอง", base: "", body, current: "utama" });
+  return page({
+    title: `${BOOK_MS} · ${BOOK_TH} — Kurikulum Pendidikan Islam Peringkat Awal · หลักสูตรอิสลามศึกษาตอนต้น`,
+    desc: "Buku teks Bahasa Melayu Tahun 1 dalam tulisan Rumi dan Jawi: 9 pelajaran, sebutan audio, latihan, kuiz dan PDF. หนังสือเรียนภาษามลายู ชั้นปีที่ 1 (อต.1) หลักสูตรอิสลามศึกษาตอนต้น อักษรรูมีและยาวี 9 บท พร้อมเสียงอ่าน แบบฝึกหัด แบบทดสอบ และ PDF",
+    base: "", body, current: "utama", path: "",
+    ld: { "@context": "https://schema.org", "@type": "Book", name: BOOK_MS, alternateName: BOOK_TH, url: SITE, inLanguage: ["ms", "th"], author: AUTHOR,
+      educationalLevel: "Tahun 1 (อต.1)", audience: { "@type": "EducationalAudience", educationalRole: "student" }, isAccessibleForFree: true,
+      description: "Buku teks Bahasa Melayu Tahun 1, Kurikulum Pendidikan Islam Peringkat Awal · หนังสือเรียนภาษามลายู ชั้นปีที่ 1 หลักสูตรอิสลามศึกษาตอนต้น",
+      hasPart: book.units.map((u, i) => ({ "@type": "LearningResource", position: i + 1, name: `${plain(u.title)} (${u.th})`, url: `${SITE}pelajaran/${pad(i + 1)}.html` })) },
+  });
 }
 
 // ---------------------------------------------------------------- อภิธานศัพท์
@@ -280,7 +323,13 @@ function glosariPage() {
 <label class="search"><span>${bi("Cari perkataan (bahasa Melayu atau bahasa Thai)", "ค้นหาคำ (ภาษามลายูหรือภาษาไทย)")}</span><input type="search" id="g-q" placeholder="cth. mata · เช่น ครู" autocomplete="off"></label>
 <p class="hint" id="g-count" aria-live="polite"></p>
 <div class="tbl"><table class="vocab" id="g-table"><thead><tr><th>Rumi</th><th>Jawi</th><th>${bi("Maksud", "ความหมาย")}</th><th>${bi("Pelajaran", "บทที่")}</th></tr></thead><tbody>${rows}</tbody></table></div>`;
-  return { html: page({ title: "อภิธานศัพท์ — Bahasa Melayu อต.1", desc: "อภิธานศัพท์ภาษามลายู–ไทย ชั้น อต.1", base: "", body, current: "glosari" }), all };
+  return { html: page({
+    title: `Glosari · อภิธานศัพท์ภาษามลายู–ไทย — ${BOOK_MS} · ${BOOK_TH}`,
+    desc: `Glosari bahasa Melayu–Thai: ${all.length} perkataan dalam tulisan Rumi dan Jawi beserta sebutan. อภิธานศัพท์ภาษามลายู–ไทย ${all.length} คำ อักษรรูมีและยาวี พร้อมเสียงอ่าน`,
+    base: "", body, current: "glosari", path: "glosari.html",
+    ld: { "@context": "https://schema.org", "@type": "DefinedTermSet", name: "Glosari Bahasa Melayu Tahun 1 · อภิธานศัพท์ อต.1", inLanguage: ["ms", "th"], url: SITE + "glosari.html",
+      hasDefinedTerm: all.map((v) => ({ "@type": "DefinedTerm", name: v.ms, description: v.th, ...(v.jw ? { alternateName: v.jw } : {}) })) },
+  }), all };
 }
 
 // ---------------------------------------------------------------- เขียนไฟล์
@@ -289,4 +338,12 @@ book.units.forEach((u, i) => fs.writeFileSync(path.join(ROOT, "pelajaran", `${pa
 const g = glosariPage();
 fs.writeFileSync(path.join(ROOT, "glosari.html"), g.html);
 fs.writeFileSync(path.join(ROOT, "index.html"), indexPage(g.all));
+// sitemap.xml สำหรับ Google
+const today = new Date().toISOString().slice(0, 10);
+const pdfs = book.units.map((u, i) => `${SITE}pdf/pelajaran-${pad(i + 1)}.pdf`);
+fs.writeFileSync(path.join(ROOT, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${[...SITEMAP.sort(), ...pdfs].map((u) => `  <url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join("\n")}
+</urlset>
+`);
 console.log(`สร้างเว็บไซต์แล้ว: ${book.units.length} บท, คำศัพท์ ${g.all.length} คำ`);

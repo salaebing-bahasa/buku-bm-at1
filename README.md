@@ -37,6 +37,13 @@ python3 _src/pdf.py
 
 (ต้องติดตั้ง Python และ `pip install playwright` แล้ว `playwright install chromium` ก่อน)
 
+## SEO (ให้ค้นหาเจอใน Google)
+
+- ทุกหน้ามีชื่อหน้า คำอธิบาย ลิงก์หลัก (canonical) ข้อมูลสำหรับแชร์ (Open Graph) และข้อมูลโครงสร้าง (schema.org) สร้างอัตโนมัติจาก `_src/build.js`
+- `sitemap.xml` สร้างใหม่ทุกครั้งที่รัน `node _src/build.js`
+- รูปที่แสดงเมื่อแชร์ลิงก์: `assets/share.png`
+- รหัสยืนยัน Google Search Console ใส่ที่บรรทัด `const GOOGLE_VERIFY = ...` ในไฟล์ `_src/build.js`
+
 ## สถิติผู้เข้าชม (GoatCounter)
 
 เว็บไซต์นับผู้เข้าชมด้วย GoatCounter รหัส `buku-bm-at1` ดูสถิติได้ที่ https://buku-bm-at1.goatcounter.com
