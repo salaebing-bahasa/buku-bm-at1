@@ -26,7 +26,8 @@ const hasAr = (s) => new RegExp(`[${AR}]`).test(s);
 // ข้อความสองภาษาในไฟล์ข้อมูลเขียนแบบ "มลายู||ไทย" → แสดงมลายูบรรทัดบน ไทยบรรทัดล่าง
 function md(s) {
   const parts = String(s).split("||");
-  if (parts.length === 2) return bi(md1(parts[0].trim()), md1(parts[1].trim()));
+  // บรรทัดไทยไม่ต้องมีช่องเติมคำซ้ำ (ใช้ … แทน) เพื่อไม่ให้นักเรียนเขียนสองครั้ง
+  if (parts.length === 2) return bi(md1(parts[0].trim()), md1(parts[1].trim().replace(/_{3,}/g, "…")));
   return md1(s);
 }
 const msPart = (s) => String(s).split("||")[0];
