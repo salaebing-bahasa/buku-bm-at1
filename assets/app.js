@@ -48,7 +48,7 @@
   }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function thNum(n) { return String(n); } // ใช้เลขอารบิก
-  function bi(ms, th) { return '<span lang="ms">' + ms + '</span> <span class="tr">· ' + th + "</span>"; }
+  function bi(ms, th) { return '<span class="bi"><span lang="ms">' + ms + '</span><span class="tr">' + th + "</span></span>"; }
   function jw(s) { return s ? '<span class="jw" lang="ms-Arab" dir="rtl">' + esc(s) + "</span>" : ""; }
 
   // ---------- แบบทดสอบตนเอง ----------
@@ -64,7 +64,7 @@
       var w = qs[idx];
       var opts = shuffle([w].concat(shuffle(words.filter(function (x) { return x.th !== w.th; })).slice(0, 3)));
       box.innerHTML = "";
-      box.appendChild(h("p", { "class": "qz-prog" }, bi("Soalan " + (idx + 1) + " / " + qs.length + " · Apakah maksud perkataan ini?", "ข้อ " + thNum(idx + 1) + " / " + thNum(qs.length) + " คำนี้แปลว่าอะไร")));
+      box.appendChild(h("p", { "class": "qz-prog" }, bi("Soalan " + (idx + 1) + " / " + qs.length + " — Apakah maksud perkataan ini?", "ข้อ " + thNum(idx + 1) + " / " + thNum(qs.length) + " คำนี้แปลว่าอะไร")));
       var word = h("p", { "class": "qz-word" }, "<span>" + esc(w.ms) + "</span>" + jw(w.jw));
       if (!document.documentElement.classList.contains("no-voice")) {
         var sb = h("button", { type: "button", "class": "say", "data-say": w.ms, "aria-label": "ฟังเสียง " + w.ms },

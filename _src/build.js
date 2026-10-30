@@ -26,7 +26,9 @@ function md(s) {
 }
 const plain = (s) => String(s).replace(/\*\*?/g, "");
 // ป้ายสองภาษา: มลายูก่อน ไทยตามหลัง
-const bi = (ms, th) => `<span lang="ms">${ms}</span> <span class="tr">· ${th}</span>`;
+const bi = (ms, th) => `<span class="bi"><span lang="ms">${ms}</span><span class="tr">${th}</span></span>`;
+// หัวข้อในข้อมูลที่เขียนแบบ "มลายู  ไทย" (เว้นสองช่อง) แยกเป็นสองบรรทัด
+const split2 = (t, f) => { const m = String(t).split(/\s{2,}/); return m.length === 2 ? f(md(m[0]), md(m[1])) : md(t); };
 const hBi = (ms, th) => `<span lang="ms">${ms}</span><span class="h-th">${th}</span>`;
 const pBi = (ms, th, cls = "") => `<div class="dw${cls ? " " + cls : ""}"><p lang="ms">${ms}</p><p class="tr">${th}</p></div>`;
 
@@ -40,7 +42,7 @@ function renderBlock(b) {
     case "p": return `<p>${md(b.text)}</p>`;
     case "bullets": return `<ul class="bul">${b.items.map((i) => `<li>${md(i)}</li>`).join("")}</ul>`;
     case "vocab": {
-      const head = b.noJawi ? "<th>#</th><th>Bahasa Melayu</th><th>Maksud · ความหมาย</th>" : "<th>#</th><th>Rumi</th><th>Jawi</th><th>Maksud · ความหมาย</th>";
+      const head = b.noJawi ? `<th>#</th><th>Bahasa Melayu</th><th>${bi("Maksud", "ความหมาย")}</th>` : `<th>#</th><th>Rumi</th><th>Jawi</th><th>${bi("Maksud", "ความหมาย")}</th>`;
       const rows = b.rows.map((r, i) => {
         const [ms, a, c] = r;
         const jw = b.noJawi ? "" : `<td class="jw-cell">${md(a)}</td>`;
@@ -74,8 +76,8 @@ function renderBlock(b) {
       return `<article class="reading">${b.title ? `<h4>${md(b.title)}</h4>` : ""}${b.paras.map((p) => `<p>${md(p)}</p>`).join("")}<button type="button" class="btn-ghost say-long" data-say="${esc(all)}">${SPEAK_ICON}<span>${bi("Dengar semua", "ฟังทั้งเรื่อง")}</span></button></article>`;
     }
     case "pantun": return `<blockquote class="pantun">${b.lines.map((l, i) => `${md(l)}${(i + 1) % 4 === 0 && i < b.lines.length - 1 ? "</blockquote><blockquote class=\"pantun\">" : "<br>"}`).join("")}</blockquote>`;
-    case "note": return `<aside class="box note"><p class="box-t">${(b.title ? md(b.title) : bi("Catatan", "หมายเหตุ"))}</p>${b.lines.map((l) => `<p>${md(l)}</p>`).join("")}</aside>`;
-    case "pattern": return `<aside class="box pattern"><p class="box-t">${md(b.title || "Pola ayat  รูปประโยค")}</p>${b.lines.map((l) => `<p>${md(l)}</p>`).join("")}</aside>`;
+    case "note": return `<aside class="box note"><p class="box-t">${(b.title ? split2(b.title, bi) : bi("Catatan", "หมายเหตุ"))}</p>${b.lines.map((l) => `<p>${md(l)}</p>`).join("")}</aside>`;
+    case "pattern": return `<aside class="box pattern"><p class="box-t">${split2(b.title || "Pola ayat  รูปประโยค", bi)}</p>${b.lines.map((l) => `<p>${md(l)}</p>`).join("")}</aside>`;
     default: throw new Error("บล็อกไม่รู้จัก: " + b.type);
   }
 }
@@ -131,7 +133,7 @@ ${FONTS}
 <link rel="icon" href="${base}assets/favicon.svg" type="image/svg+xml">
 </head>
 <body>
-<a class="skip" href="#isi">Langkau ke kandungan · ข้ามไปยังเนื้อหา</a>
+<a class="skip" href="#isi">${bi("Langkau ke kandungan", "ข้ามไปยังเนื้อหา")}</a>
 <header class="site-head">
   <a class="brand" href="${base}index.html"><span class="mark" aria-hidden="true"></span><span>Bahasa Melayu อต.1<small lang="ms">Pendidikan Islam Peringkat Awal</small><small>หลักสูตรอิสลามศึกษาตอนต้น</small></span></a>
   <nav aria-label="Menu utama · เมนูหลัก">${nav}</nav>
@@ -159,7 +161,7 @@ function unitPage(u, i) {
   const next = book.units[i + 1] || null;
   const vocab = unitVocab(u);
   const chips = u.indicators.map((k) => `<li title="${esc(book.indicators_ms[k - 1] + " · " + book.indicators[k - 1])}">อต.${thNum(book.grade)}/${thNum(k)}</li>`).join("");
-  const sections = u.sections.map((s) => `<section class="sec"><h3>${md(s.title)}</h3>${s.blocks.map(renderBlock).join("\n")}</section>`).join("\n");
+  const sections = u.sections.map((s) => `<section class="sec"><h3>${split2(s.title, hBi)}</h3>${s.blocks.map(renderBlock).join("\n")}</section>`).join("\n");
   const quiz = vocab.length >= 4 ? `
 <section class="sec kuiz" id="kuiz">
   <h3>${hBi("Kuiz Kendiri", "ทดสอบตนเอง")}</h3>
@@ -172,9 +174,9 @@ function unitPage(u, i) {
   <div class="cards" data-vocab="${esc(JSON.stringify(vocab))}"></div>
 </section>` : "";
   const body = `
-<nav class="crumb" aria-label="Lokasi · ตำแหน่ง"><a href="../index.html">Laman Utama · หน้าแรก</a> / <a href="../index.html#pelajaran">Pelajaran · บทเรียน</a> / <span>Pelajaran ${n} · บทที่ ${thNum(n)}</span></nav>
+<nav class="crumb" aria-label="Lokasi · ตำแหน่ง"><p lang="ms"><a href="../index.html">Laman Utama</a> / <a href="../index.html#pelajaran">Pelajaran</a> / <span>Pelajaran ${n}</span></p><p class="tr"><a href="../index.html">หน้าแรก</a> / <a href="../index.html#pelajaran">บทเรียน</a> / <span>บทที่ ${thNum(n)}</span></p></nav>
 <header class="unit-head">
-  <p class="kicker">Pelajaran ${n} · บทที่ ${thNum(n)}</p>
+  <p class="kicker">${bi(`Pelajaran ${n}`, `บทที่ ${thNum(n)}`)}</p>
   <h1>${md(u.title)}</h1>
   <p class="th-title">${md(u.th)}</p>
   <ul class="chips" aria-label="Petunjuk · ตัวชี้วัด">${chips}</ul>
@@ -185,8 +187,8 @@ ${sections}
 ${quiz}
 <aside class="box nilai"><p class="box-t">${bi("Nilai Murni", "ข้อคิด")}</p><p>${md(u.nilai)}</p></aside>
 <nav class="pager" aria-label="Pelajaran sebelum dan seterusnya · บทก่อนหน้าและถัดไป">
-  ${prev ? `<a class="prev" href="${pad(n - 1)}.html"><small>Pelajaran sebelum · บทก่อนหน้า</small>${esc(prev.title)}</a>` : "<span></span>"}
-  ${next ? `<a class="next" href="${pad(n + 1)}.html"><small>Pelajaran seterusnya · บทถัดไป</small>${esc(next.title)}</a>` : `<a class="next" href="../glosari.html"><small>Akhir buku · ท้ายเล่ม</small>Glosari · อภิธานศัพท์</a>`}
+  ${prev ? `<a class="prev" href="${pad(n - 1)}.html"><small>${bi("Pelajaran sebelum", "บทก่อนหน้า")}</small>${esc(prev.title)}</a>` : "<span></span>"}
+  ${next ? `<a class="next" href="${pad(n + 1)}.html"><small>${bi("Pelajaran seterusnya", "บทถัดไป")}</small>${esc(next.title)}</a>` : `<a class="next" href="../glosari.html"><small>${bi("Akhir buku", "ท้ายเล่ม")}</small>${bi("Glosari", "อภิธานศัพท์")}</a>`}
 </nav>`;
   return page({ title: `บทที่ ${thNum(n)} ${plain(u.title)} — Bahasa Melayu อต.1`, desc: `${plain(u.title)} (${u.th}) บทเรียนภาษามลายู ชั้น อต.1`, base: "../", body, current: "pelajaran" });
 }
@@ -208,7 +210,7 @@ function indexPage(words) {
     <div class="actions"><a class="btn" href="pelajaran/01.html">${bi("Mula Pelajaran 1", "เริ่มบทที่ 1")}</a><a class="btn-ghost" href="#pelajaran">${bi("Semua Pelajaran", "ดูบทเรียนทั้งหมด")}</a></div>
   </div>
   <figure class="word" aria-live="polite">
-    <p class="word-label">Perkataan hari ini · คำศัพท์วันนี้</p>
+    <p class="word-label">${bi("Perkataan hari ini", "คำศัพท์วันนี้")}</p>
     <p class="w-ms" id="w-ms">—</p>
     <p class="w-jw jw" id="w-jw" lang="ms-Arab" dir="rtl"></p>
     <p class="w-th" id="w-th"></p>
@@ -230,7 +232,7 @@ function indexPage(words) {
 <section class="block" id="standard">
   <h2>${hBi("Standard dan Petunjuk", "มาตรฐานและตัวชี้วัด")}</h2>
   <aside class="box"><p class="box-t">${bi("Standard มย", "มาตรฐาน มย")}</p><p lang="ms">Menggunakan proses mendengar, bertutur, membaca dan menulis serta memahami prinsip penggunaan bahasa Melayu untuk berkomunikasi, belajar, meningkatkan nilai kehidupan seharian dan mencari ilmu daripada sumber pembelajaran secara kreatif, serta mempunyai tabiat suka membaca.</p><p class="tr">ใช้กระบวนการฟัง พูด อ่าน เขียน เข้าใจหลักการในการใช้ภาษามลายูเพื่อการสื่อสาร การเรียนรู้ เพิ่มคุณค่าในการดำรงชีวิตประจำวันและศึกษาค้นคว้าความรู้จากแหล่งเรียนรู้อย่างสร้างสรรค์ และมีนิสัยรักการอ่าน</p></aside>
-  <div class="tbl"><table class="map"><thead><tr><th>Kod · รหัส</th><th>Petunjuk Tahun 1 · ตัวชี้วัดชั้นปีที่ 1</th><th>Pelajaran · บทที่</th></tr></thead><tbody>${map}</tbody></table></div>
+  <div class="tbl"><table class="map"><thead><tr><th>${bi("Kod", "รหัส")}</th><th>${bi("Petunjuk Tahun 1", "ตัวชี้วัดชั้นปีที่ 1")}</th><th>${bi("Pelajaran", "บทที่")}</th></tr></thead><tbody>${map}</tbody></table></div>
 </section>
 
 <section class="block" id="guru">
@@ -261,10 +263,10 @@ function glosariPage() {
   const all = [...map.values()].sort((a, b) => a.ms.localeCompare(b.ms, "ms"));
   const rows = all.map((v) => `<tr data-q="${esc((v.ms + " " + v.th).toLowerCase())}"><td class="ms"><span>${esc(v.ms)}</span>${speakBtn(v.ms)}</td><td class="jw-cell">${v.jw ? md(v.jw) : ""}</td><td>${esc(v.th)}</td><td class="n"><a href="pelajaran/${pad(v.unit)}.html">${thNum(v.unit)}</a></td></tr>`).join("");
   const body = `
-<header class="unit-head"><p class="kicker">Glosari · อภิธานศัพท์</p><h1>Glosari</h1><p class="th-title">อภิธานศัพท์</p><p class="hint">${bi(`Semua perkataan: ${all.length}, disusun mengikut abjad`, `คำศัพท์ทั้งหมด ${thNum(all.length)} คำ เรียงตามตัวอักษร`)}</p></header>
-<label class="search"><span>${bi("Cari perkataan (bahasa Melayu atau bahasa Thai)", "ค้นหาคำ (ภาษามลายูหรือภาษาไทย)")}</span><input type="search" id="g-q" placeholder="cth. mata / เช่น ครู" autocomplete="off"></label>
+<header class="unit-head"><h1>Glosari</h1><p class="th-title">อภิธานศัพท์</p><p class="hint">${bi(`Semua perkataan: ${all.length}, disusun mengikut abjad`, `คำศัพท์ทั้งหมด ${thNum(all.length)} คำ เรียงตามตัวอักษร`)}</p></header>
+<label class="search"><span>${bi("Cari perkataan (bahasa Melayu atau bahasa Thai)", "ค้นหาคำ (ภาษามลายูหรือภาษาไทย)")}</span><input type="search" id="g-q" placeholder="cth. mata · เช่น ครู" autocomplete="off"></label>
 <p class="hint" id="g-count" aria-live="polite"></p>
-<div class="tbl"><table class="vocab" id="g-table"><thead><tr><th>Rumi</th><th>Jawi</th><th>Maksud · ความหมาย</th><th>Pelajaran · บทที่</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+<div class="tbl"><table class="vocab" id="g-table"><thead><tr><th>Rumi</th><th>Jawi</th><th>${bi("Maksud", "ความหมาย")}</th><th>${bi("Pelajaran", "บทที่")}</th></tr></thead><tbody>${rows}</tbody></table></div>`;
   return { html: page({ title: "อภิธานศัพท์ — Bahasa Melayu อต.1", desc: "อภิธานศัพท์ภาษามลายู–ไทย ชั้น อต.1", base: "", body, current: "glosari" }), all };
 }
 
