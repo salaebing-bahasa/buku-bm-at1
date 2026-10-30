@@ -48,6 +48,8 @@
   }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function thNum(n) { return String(n); } // ใช้เลขอารบิก
+  var ASSETS = (document.currentScript && document.currentScript.src || "").replace(/app\.js(\?.*)?$/, "");
+  function pic(w, size) { return w.img ? '<img class="pic" src="' + ASSETS + 'gambar/' + w.img + '.svg" alt="" width="' + size + '" height="' + size + '">' : ""; }
   function bi(ms, th) { return '<span class="bi"><span lang="ms">' + ms + '</span><span class="tr">' + th + "</span></span>"; }
   function jw(s) { return s ? '<span class="jw" lang="ms-Arab" dir="rtl">' + esc(s) + "</span>" : ""; }
 
@@ -112,7 +114,7 @@
   document.querySelectorAll(".cards").forEach(function (box) {
     JSON.parse(box.getAttribute("data-vocab")).forEach(function (w) {
       var c = h("button", { type: "button", "class": "card", "aria-label": "บัตรคำ " + w.ms + " แตะเพื่อดูความหมาย" },
-        '<span class="card-in"><span class="face front">' + esc(w.ms) + jw(w.jw) + '</span><span class="face back">' + esc(w.th) + "</span></span>");
+        '<span class="card-in"><span class="face front">' + pic(w, 56) + '<span class="f-ms">' + esc(w.ms) + '</span>' + jw(w.jw) + '</span><span class="face back">' + esc(w.th) + "</span></span>");
       c.addEventListener("click", function () {
         c.classList.toggle("flip");
         if (c.classList.contains("flip")) say(w.ms);
@@ -132,6 +134,8 @@
       wMs.textContent = w.ms;
       document.getElementById("w-jw").textContent = w.jw || "";
       document.getElementById("w-th").textContent = w.th;
+      var wp = document.getElementById("w-pic");
+      if (wp) { if (w.img) { wp.src = ASSETS + "gambar/" + w.img + ".svg"; wp.hidden = false; } else { wp.hidden = true; wp.removeAttribute("src"); } }
     };
     show();
     document.getElementById("w-next").addEventListener("click", function () { k = (k + 1 + Math.floor(Math.random() * (list.length - 1))) % list.length; show(); });
