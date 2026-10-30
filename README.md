@@ -14,6 +14,10 @@
 - อภิธานศัพท์พร้อมช่องค้นหา (`glosari.html`)
 - ปุ่ม "Muat turun PDF / ดาวน์โหลด PDF" ในแต่ละบท (ไฟล์อยู่ในโฟลเดอร์ `pdf/`)
 
+## หลักการสะกดอักษรยาวี
+
+ตัวสะกดยาวีทั้งหมดใช้หลักตาม *Pedoman Umum Ejaan Jawi Bahasa Melayu* ของ Dewan Bahasa dan Pustaka (DBP) และตรวจกับ PRPM DBP (https://prpm.dbp.gov.my/)
+
 ## วิธีแก้ไขเนื้อหา
 
 เนื้อหาทั้งหมดอยู่ในไฟล์ `_src/data/at1.js` ไฟล์เดียว
