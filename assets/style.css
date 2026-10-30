@@ -62,6 +62,17 @@ strong { font-weight: 600; }
 .site-head nav a:hover, .site-head nav a[aria-current] { color: var(--green); }
 /* สองภาษา: มลายูก่อน ไทยตามหลัง */
 .tr { color: var(--ink-soft); font-weight: 400; }
+.bi { display: inline-flex; flex-direction: column; vertical-align: top; line-height: 1.35; }
+.bi > .tr { font-size: .9em; margin-top: .1rem; }
+.btn .bi, .btn-ghost .bi { align-items: center; }
+.btn, .btn-ghost { border-radius: 16px; }
+.word-foot .btn-ghost { min-width: 9rem; justify-content: center; }
+th .bi > .tr { color: inherit; opacity: .85; font-size: .85em; }
+.crumb p { margin: 0; }
+.crumb p.tr { font-size: .9em; }
+.pager .bi { display: flex; }
+.pager .next .bi { align-items: flex-end; }
+.skip .tr { color: inherit; }
 .btn .tr, .btn-ghost .tr, .pager .tr { color: inherit; opacity: .85; }
 .h-th { display: block; font: 500 .62em/1.4 var(--f-body); color: var(--ink-soft); margin-top: .1rem; }
 .dw { margin: 0 0 1rem; }
